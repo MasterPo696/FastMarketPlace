@@ -1,0 +1,82 @@
+{% extends "base.html"%}
+
+{% block title %}
+<title>Корзина</title>
+{% endblock %}
+
+{% block header %}
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+    <h1 class="display-4 fw-normal text-body-emphasis">Корзина</h1>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {% if cart_items %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Товар</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Сумма</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>
+                                {% if item.image_path %}
+                                <img src="{{ url_for('static', filename=item.image_path) }}" 
+                                     alt="{{ item.title }}" 
+                                     style="height: 50px; width: 50px; object-fit: cover;"
+                                     class="me-2">
+                                {% endif %}
+                                {{ item.title }}
+                            </td>
+                            <td>${{ item.price }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button onclick="updateCart({{ item.id }}, 'remove')" 
+                                            class="btn btn-sm btn-outline-secondary">-</button>
+                                    <span class="px-2" id="item-count-{{ item.id }}">
+                                        {{ session['cart'].count(item.id) }}
+                                    </span>
+                                    <button onclick="updateCart({{ item.id }}, 'add')" 
+                                            class="btn btn-sm btn-outline-secondary">+</button>
+                                </div>
+                            </td>
+                            <td>${{ (item.price * session['cart'].count(item.id)) | round(2) }}</td>
+                            <td>
+                                <button onclick="updateCart({{ item.id }}, 'delete')" 
+                                        class="btn btn-sm btn-danger">Удалить</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+                            <td><strong>${{ total_price | round(2) }}</strong></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="text-end mt-3">
+                <a href="/checkout" class="btn btn-primary">Оформить заказ</a>
+            </div>
+            {% else %}
+            <div class="text-center">
+                <h3>Корзина пуста</h3>
+                <a href="/" class="btn btn-primary mt-3">Перейти к покупкам</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

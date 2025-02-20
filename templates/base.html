@@ -76,8 +76,14 @@
       <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/">Главная</a>
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/about">О нас</a>
-        <!-- <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Каталог</a>
-        <a class="py-2 link-body-emphasis text-decoration-none" href="#">Контакты</a> -->
+        <a class="me-3 py-2 link-body-emphasis text-decoration-none position-relative" href="/cart">
+            Корзина
+            {% if session['cart']|length > 0 %}
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ session['cart']|length }}
+            </span>
+            {% endif %}
+        </a>
       </nav>
       <a class="btn btn-outline-primary" href="/create">Добавить товар</a>
     </div>

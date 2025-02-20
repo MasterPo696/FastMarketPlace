@@ -15,10 +15,10 @@
 <div class="container">
   <div class="row">
     {% for el in data %}
-    <div class="col-md-4 mb-4">
-      <div class="card">
+    <div class="col-md-3 mb-4">
+      <div class="card rounded">
         {% if el.image_path %}
-        <img src="{{ url_for('static', filename=el.image_path) }}" class="card-img-top" alt="{{ el.title }}" style="height: 200px; object-fit: cover;">
+        <img src="{{ url_for('static', filename=el.image_path) }}" class="card-img-top" alt="{{ el.title }}" style="height: 150px; object-fit: cover;">
         {% endif %}
         <div class="card-header py-3">
           <h4 class="my-0 fw-normal">{{ el.title }}</h4>
