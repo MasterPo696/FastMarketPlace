@@ -1,0 +1,30 @@
+{% extends "base.html"%}
+
+
+{% block title %}
+<title>Добавить товар</title>
+{% endblock %}
+
+
+{% block header %}
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+  <h1 class="display-4 fw-normal text-body-emphasis">Добавление товар</h1>
+  <p class="fs-5 text-body-secondary">Добавьте новый товар в наш магазин</p>
+</div>
+{% endblock %}  
+
+{% block body %}
+<div class="container">
+    <h1>Добавление товара</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="text" class="form-control" name="title" id="title" placeholder="Введите название товара"><br>
+        <input type="number" class="form-control" name="price" id="price" placeholder="Введите цену товара"><br>
+        <input type="text" class="form-control" name="description" id="description" placeholder="Введите описание товара"><br>
+        <div class="mb-3">
+            <label for="image" class="form-label">Изображение товара</label>
+            <input type="file" class="form-control" name="image" id="image" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-success">Добавить товар</button>
+    </form>
+</div>
+{% endblock %}
