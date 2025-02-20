@@ -85,15 +85,25 @@ Visit `http://localhost:5000` in your browser.
 flask-marketplace/
 ├── app/
 │   ├── payments.py      # Payment processing
+│   ├── config.py        # Configuration
 │   └── pictures.py      # Image handling
 ├── static/
 │   └── images/          # Uploaded product images
 ├── templates/           # HTML templates
+│   ├── index.html       # Main page
+│   ├── about.html       # About page
+│   ├── create.html      # Create page
+│   ├── payment.html     # Payment page
+│   └── index.html        # Base template
 ├── secrets/
+│   ├── example.toml      # Configuration files
 │   └── config.toml      # Configuration files
+├── venv/
+├── .gitignore
+├── Readme.md
 ├── main.py             # Application entry point
 └── requirements.txt    # Project dependencies
-```main.py
+```
 
 ## 💡 Key Features Explained
 

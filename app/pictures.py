@@ -1,6 +1,6 @@
 import magic
 import os
-from flask import app
+from app.config import app
 from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -9,31 +9,28 @@ class ImageHandler:
     def __init__(self):
         pass
 
-    def allowed_file(self, filename):
-        # Check if the file has an extension and it's in allowed extensions
-        if '.' not in filename:
+    def allowed_file(self, file):
+        if '.' not in file.filename:
             return False
         
-        # Get the actual file extension
-        extension = filename.rsplit('.', 1)[1].lower()
+        extension = file.filename.rsplit('.', 1)[1].lower()
         
-        # Check if it's in allowed extensions
         if extension not in ALLOWED_EXTENSIONS:
             return False
         
-        # Additional MIME type validation
         try:
-            mime = magic.from_file(filename, mime=True)
+            file_content = file.read(2048)  
+            mime = magic.from_buffer(file_content, mime=True)
+            file.seek(0)
             return mime.startswith('image/')
-        except ImportError:
-            # Fallback if python-magic is not installed
+        except Exception as e:
             return extension in ALLOWED_EXTENSIONS
 
     def handle_image_upload(self, file):
         if not file or file.filename == '':
             return None, "No selected file", 400
             
-        if not self.allowed_file(file.filename):
+        if not self.allowed_file(file):
             return None, "Invalid file type. Allowed types are: png, jpg, jpeg, gif", 400
             
         try:

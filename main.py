@@ -1,17 +1,8 @@
-from flask import Flask, render_template, request, redirect
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from flask import render_template, request, redirect
 from toml import load
 from app.payments import ProcessPayment
 from app.pictures import ImageHandler
-
-
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///shop.db'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['UPLOAD_FOLDER'] = 'static/images'
-db = SQLAlchemy(app=app)
-
+from app.config import app, db
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,11 +10,10 @@ class Item(db.Model):
     price = db.Column(db.Float, nullable=False)
     isAvailable = db.Column(db.Boolean, default=True)
     description = db.Column(db.Text, nullable=False)
-    image_path = db.Column(db.String(200))  # Add this line
+    image_path = db.Column(db.String(200))
 
     def __repr__(self):
         return f'{self.title}'
-    
 
 @app.route('/')
 def index():
@@ -51,7 +41,6 @@ def create():
         price = request.form['price']
         description = request.form['description']
         
-        # Handle image upload
         if 'image' not in request.files:
             return "No image file provided", 400
         
@@ -76,6 +65,7 @@ def create():
     else:
         return render_template("create.html")
 
-
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
