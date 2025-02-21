@@ -1,0 +1,134 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "title": "Banana",
+            "price": 10.0,
+            "description": "Sweet banana",
+            "image_path": "images/item_fresh fruits_fruits and vegetables.jpg",
+            "weight": 100.0,
+            "category": "Fruits and Vegetables",
+            "subcategory": "Fresh Fruits"
+        },
+        {
+            "id": 2,
+            "title": "Nasty Cheese",
+            "price": 25.0,
+            "description": "Some people like, some not",
+            "image_path": "images/item_cheese_dairy products.jpg",
+            "weight": 200.0,
+            "category": "Dairy Products",
+            "subcategory": "Cheese"
+        },
+        {
+            "id": 3,
+            "title": "Spagethi",
+            "price": 15.0,
+            "description": "Spagethi from good source",
+            "image_path": "images/item_cakes and pastries_bread and pastries.jpg",
+            "weight": 500.0,
+            "category": "Bread and Pastries",
+            "subcategory": "Cakes and Pastries"
+        },
+        {
+            "id": 1,
+            "title": "Banan",
+            "price": 10.0,
+            "description": "Tasty banana",
+            "image_path": "images/item_свежие фрукты_фрукты.jpg",
+            "weight": 100.0,
+            "category": "Фрукты",
+            "subcategory": "Свежие фрукты"
+        },
+        {
+            "id": 1,
+            "title": "banan",
+            "price": 12.0,
+            "description": "12",
+            "image_path": "images/item_свежие фрукты_фрукты.jpg",
+            "weight": 12.0,
+            "category": "Фрукты",
+            "subcategory": "Свежие фрукты"
+        },
+        {
+            "id": 1,
+            "title": "123",
+            "price": 123.0,
+            "description": "123",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 123.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        },
+        {
+            "id": 1,
+            "title": "1",
+            "price": 1.0,
+            "description": "1",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 1.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        },
+        {
+            "id": 1,
+            "title": "1",
+            "price": 1.0,
+            "description": "1",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 1.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        },
+        {
+            "id": 1,
+            "title": "1",
+            "price": 1.0,
+            "description": "1",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 1.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        },
+        {
+            "id": 1,
+            "title": "1",
+            "price": 1.0,
+            "description": "123",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 123.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        },
+        {
+            "id": 1,
+            "title": "1",
+            "price": 1.0,
+            "description": "1",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 1.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        },
+        {
+            "id": 1,
+            "title": "1",
+            "price": 1.0,
+            "description": "1",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 1.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        },
+        {
+            "id": 1,
+            "title": "1",
+            "price": 1.0,
+            "description": "1",
+            "image_path": "images/item_цитрусовые_фрукты.jpg",
+            "weight": 1.0,
+            "category": "Фрукты",
+            "subcategory": "Цитрусовые"
+        }
+    ]
+}

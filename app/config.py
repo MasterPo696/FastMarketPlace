@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import os
 import secrets
 
@@ -14,11 +15,17 @@ app = Flask(__name__,
 # Генерируем случайный секретный ключ
 app.secret_key = secrets.token_hex(16)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///shop.db'
+# Конфигурация для баз данных
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///products.db'
+app.config["SQLALCHEMY_BINDS"] = {
+    'users': 'sqlite:///users.db',
+    'orders': 'sqlite:///orders.db'
+}
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static/images')
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Импортируем модели после создания db
 from app.models import *

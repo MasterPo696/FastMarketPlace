@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Verify Account</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-4 mt-5">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">Verify Account</h2>
+                    <p class="text-center text-muted mb-4">
+                        Please enter the verification code sent to your {{ user.email or user.phone }}
+                    </p>
+                    
+                    <form method="post">
+                        <div class="mb-4">
+                            <label class="form-label">Verification Code</label>
+                            <input type="text" name="code" class="form-control form-control-lg text-center" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Verify</button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            Didn't receive the code? Check your spam folder or try again later.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

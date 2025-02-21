@@ -1,21 +1,275 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-bs-theme="auto">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" 
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Leaflet CSS (до Bootstrap Icons) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <style>
         .cursor-pointer {
             cursor: pointer;
         }
+        
+        /* Добавляем новые стили */
+        .side-cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 340px;
+            height: calc(100vh - 40px);
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            z-index: 1050;
+            padding: 20px;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-cart.active {
+            transform: translateX(0);
+        }
+
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .cart-footer {
+            border-top: 1px solid #eee;
+            padding-top: 16px;
+            margin-top: auto;
+        }
+
+        /* Add dark mode support */
+        [data-bs-theme="dark"] .side-cart {
+            background: #212529;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        [data-bs-theme="dark"] .cart-item {
+            border-bottom-color: #495057;
+        }
+
+        [data-bs-theme="dark"] .cart-footer {
+            border-top-color: #495057;
+        }
+
+        .cart-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .delivery-info {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .main-content {
+            margin-right: 0;
+            transition: margin-right 0.3s ease;
+        }
+
+        /* Добавляем отступ только на главной странице */
+        body[data-page="index"] .main-content {
+            margin-right: 380px;
+        }
+
+        /* Обновляем стили для карточки продукта */
+        .product-card {
+            border: none;
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #f8f9fa;
+            padding: 16px;
+            cursor: pointer;
+        }
+
+        .product-card .product-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card .product-info {
+            flex-grow: 1;
+        }
+
+        .product-card .product-footer {
+            margin-top: auto;
+            padding-top: 12px;
+        }
+
+        .product-card .price-block {
+            margin-bottom: 8px;
+        }
+
+        .product-card .btn-group {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .product-card .btn {
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        .product-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .delivery-time {
+            display: none;
+        }
+
+        /* Обновляем стиль для страницы корзины */
+        body[data-page="cart"] .main-content {
+            margin-right: 0;
+        }
+
+        /* Добавляем стили для бокового меню категорий */
+        .side-categories {
+            background: #fff;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+        }
+
+        /* Темная тема для бокового меню */
+        [data-bs-theme="dark"] .side-categories {
+            background: #212529;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        /* Стили для кнопок количества */
+        .btn-group .btn {
+            border: 1px solid #dee2e6;
+            background: white;
+            color: #212529;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .btn-group .btn:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-group .btn.disabled {
+            background: white;
+            color: #212529;
+        }
+
+        /* Стили для цен */
+        .price-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-block .old-price {
+            color: #6c757d;
+            text-decoration: line-through;
+            font-size: 14px;
+        }
+
+        .price-block .current-price {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Стили для бейджей скидок */
+        .discount-badge {
+            background: #ff3b30;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Стили для кнопки оформления заказа */
+        .checkout-button {
+            background: #ff3b30;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 500;
+        }
+
+        .checkout-button:hover {
+            background: #ff2d20;
+        }
+
+        /* Стили для модального окна */
+        .product-modal {
+            padding: 0 !important;
+        }
+
+        .product-modal .modal-content {
+            border: none;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .product-modal .modal-body {
+            padding: 24px;
+        }
+
+        .product-modal .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .product-modal .product-details {
+            margin-top: 24px;
+        }
+
+        .product-modal .characteristic-item {
+            padding: 12px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            margin-bottom: 12px;
+        }
+
+        [data-bs-theme="dark"] .product-modal .characteristic-item {
+            background: #2b3035;
+        }
     </style>
+    <script src="{{ url_for('static', filename='js/address.js') }}" defer></script>
     {% block title %}{% endblock %}
 </head>
 
-<body>
+<body {% if request.path == '/cart' %}data-page="cart"{% endif %}>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
@@ -71,69 +325,150 @@
   </symbol>
 </svg>
 
-<div class="container py-3">
-  <header>
-    <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
-      <a href="/" class="d-flex align-items-center link-body-emphasis text-decoration-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img"><title>Bootstrap</title><path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor"></path></svg>
-        <span class="fs-4">Крутой маркетплейс</span>
-      </a>
+<div class="main-content">
+    <div class="container py-3">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <span class="fs-4">FastMarket</span>
+            </a>
+            
+            <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto align-items-center">
+                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/">Home</a>
+                {% if get_current_user() %}
+                    <a class="me-3 py-2 {% if has_active_orders %}text-danger fw-bold{% else %}link-body-emphasis{% endif %} text-decoration-none" 
+                       href="{{ url_for('orders') }}">
+                        Orders
+                        {% if has_active_orders %}
+                            <i class="bi bi-circle-fill text-danger" style="font-size: 0.5em; vertical-align: super;"></i>
+                        {% endif %}
+                    </a>
+                    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ url_for('cart') }}">
+                        Cart
+                        {% if session.get('cart', {}) %}
+                            <span class="badge bg-primary rounded-pill">{{ session['cart']|length }}</span>
+                        {% endif %}
+                    </a>
+                    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ url_for('profile') }}">Profile</a>
+                    <a class="py-2 link-body-emphasis text-decoration-none" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="py-2 link-body-emphasis text-decoration-none" href="{{ url_for('login') }}">Login</a>
+                {% endif %}
+            </nav>
+        </header>
 
-      <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/">Главная</a>
-        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/about">О нас</a>
-        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/cart">
-          Корзина {% if session.get('cart') %}({{ session['cart'].values()|sum }}){% endif %}
-        </a>
-      </nav>
-      <a class="btn btn-outline-primary" href="/create">Добавить товар</a>
+        {% block body %}{% endblock %}
+
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="24" height="19">
+                    <small class="d-block mb-3 text-body-secondary">© 2017–2024</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Features</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>About</h5>
+                    <ul class="list-unstyled text-small">
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
+                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
     </div>
-    {% block header %}{% endblock %}
-  </header>
-
-  {% block body %}{% endblock %}
-
-  <footer class="pt-4 my-md-5 pt-md-5 border-top">
-    <div class="row">
-      <div class="col-12 col-md">
-        <img class="mb-2" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="24" height="19">
-        <small class="d-block mb-3 text-body-secondary">© 2017–2024</small>
-      </div>
-      <div class="col-6 col-md">
-        <h5>Features</h5>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-md">
-        <h5>Resources</h5>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-md">
-        <h5>About</h5>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
-        </ul>
-      </div>
-    </div>
-  </footer>
 </div>
+
+<div class="side-cart" id="sideCart" 
+     {% if request.endpoint != 'index' %}style="display: none"{% endif %}>
+    <div class="cart-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Корзина</h5>
+    </div>
+    
+    <div class="delivery-info mb-3">
+        <i class="bi bi-clock me-2"></i>
+        <span>Время доставки: 15 минут</span>
+    </div>
+    
+    <div class="cart-items">
+        {% if session.get('cart', {}) %}
+            {% for item_id, quantity in session['cart'].items() %}
+                {% set item = get_item(item_id) %}
+                {% if item %}
+                <div class="cart-item">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="{{ url_for('static', filename=item.image_path) }}" alt="{{ item.title }}">
+                        <div class="ms-3 flex-grow-1">
+                            <h6 class="mb-0">{{ item.title }}</h6>
+                            <small class="text-muted">{{ item.weight }} г</small>
+                            <div class="mt-1">
+                                <small class="text-muted d-block">
+                                    Категория: {{ item.subcategory.category.name }}
+                                </small>
+                                <small class="text-muted d-block">
+                                    В наличии: {{ item.amount }} шт
+                                </small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="fw-bold">${{ "%.2f"|format(item.discounted_price) }}</span>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="/remove_from_cart/{{ item.id }}" class="btn btn-outline-secondary">-</a>
+                                    <span class="btn btn-outline-secondary disabled">{{ quantity }}</span>
+                                    <a href="/add_to_cart/{{ item.id }}" class="btn btn-outline-secondary">+</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5">
+                <p class="text-muted">Корзина пуста</p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if session.get('cart', {}) %}
+    <div class="cart-footer mt-auto">
+        <div class="d-flex justify-content-between mb-3">
+            <span>Итого:</span>
+            <span class="fw-bold">${{ "%.2f"|format(get_cart_total()) }}</span>
+        </div>
+        <a href="/cart" class="btn btn-primary w-100">Оформить заказ</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Сначала jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Затем Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    
+<!-- Потом Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
+{% block scripts %}{% endblock %}
 </body>
 </html>

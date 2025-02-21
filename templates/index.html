@@ -1,116 +1,65 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
 
 {% block title %}
-<title>Онлайн магазин</title>
+<title>Online Store</title>
 {% endblock %}
 
 {% block header %}
 <div class="pricing-header p-3 pb-md-4 mx-auto">
-  <h1 class="display-4 fw-normal text-body-emphasis">Наши товары</h1>
+  <h1 class="display-4 fw-normal text-body-emphasis">Our Products</h1>
 </div>
 {% endblock %}
 
 {% block body %}
-<div class="container">
-  <div class="row">
-    <!-- Боковое меню категорий -->
-    <div class="col-md-3">
-      <div class="list-group">
-        <a href="/" class="list-group-item list-group-item-action border-0 rounded mb-2 {% if not current_category_id %}active{% endif %}">
-          Все товары
-        </a>
-        {% for category in categories %}
-        <div class="mb-2">
-          <button class="list-group-item list-group-item-action border-0 rounded w-100 text-start d-flex justify-content-between align-items-center" 
-                  type="button" 
-                  data-bs-toggle="collapse" 
-                  data-bs-target="#category-{{ category.id }}" 
-                  aria-expanded="{% if current_category_id == category.id %}true{% else %}false{% endif %}">
-            {{ category.name }}
-            <i class="bi bi-chevron-down"></i>
-          </button>
-          <div class="collapse {% if current_category_id == category.id %}show{% endif %}" 
-               id="category-{{ category.id }}">
-            <div class="list-group mt-1 ms-3">
-              {% for subcategory in category.subcategories %}
-              <a href="/?subcategory_id={{ subcategory.id }}" 
-                 class="list-group-item list-group-item-action border-0 rounded py-2 {% if current_subcategory_id == subcategory.id %}active{% else %}{% if not subcategory.items %}text-muted{% endif %}{% endif %}">
-                {{ subcategory.name }}
-              </a>
-              {% endfor %}
-            </div>
-          </div>
+<body data-page="index">
+<div class="container py-4">
+    <!-- Добавьте в начало шаблона для отладки -->
+    {% if items %}
+        <div class="debug-info" style="display: none;">
+            <h3>Debug Info:</h3>
+            <ul>
+            {% for item in items %}
+                <li>{{ item.title }} (ID: {{ item.id }}, Active: {{ item.is_active }}, Available: {{ item.isAvailable }})</li>
+            {% endfor %}
+            </ul>
         </div>
-        {% endfor %}
-      </div>
+    {% endif %}
+    <!-- Отладочная информация -->
+    {% if debug %}
+    <div class="alert alert-info">
+        <p>Number of items: {{ items|length }}</p>
+        <p>Categories: {{ categories|length }}</p>
+        <pre>{{ items|tojson(indent=2) }}</pre>
     </div>
+    {% endif %}
+    <div class="row">
+    <!-- Sidebar with categories -->
+    {% include 'components/category/sidebar.html' %}
 
-    <!-- Основной контент -->
+    <!-- Main content -->
     <div class="col-md-9">
+      {% if get_current_user() and get_current_user().is_admin %}
+      <div class="d-flex justify-content-end mb-4">
+        <a href="{{ url_for('admin_products') }}" class="btn btn-primary">
+          <i class="bi bi-gear-fill me-2"></i>
+          Manage Products
+        </a>
+      </div>
+      {% endif %}
+      
       <div class="row g-4">
-        {% if data %}
-          {% for el in data %}
-          <div class="col-6 col-md-4">
-            <div class="card h-100 rounded-4 border-0 bg-light">
-              {% if el.image_path %}
-              <div class="position-relative">
-                {% if el.discount %}
-                <div class="position-absolute top-0 end-0 p-2">
-                  <span class="badge bg-danger">-{{ el.discount }}%</span>
-                </div>
-                {% endif %}
-                <img src="{{ url_for('static', filename=el.image_path) }}" 
-                     class="card-img-top rounded-4 cursor-pointer" 
-                     alt="{{ el.title }}" 
-                     style="height: 200px; object-fit: cover;"
-                     data-bs-toggle="modal" 
-                     data-bs-target="#modal-{{ el.id }}">
-              </div>
-              {% endif %}
-              <div class="card-body d-flex flex-column">
-                <div class="mb-2">
-                  {% if el.subcategory %}
-                  <small class="text-muted">{{ el.subcategory.category.name }} - {{ el.subcategory.name }}</small>
-                  {% endif %}
-                  <h5 class="card-title mb-1">{{ el.title }}</h5>
-                  <p class="card-text text-muted mb-1">{{ el.weight }} • {{ el.description }}</p>
-                </div>
-                <div class="mt-auto">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      {% if el.discount %}
-                        <small class="text-muted text-decoration-line-through">${{ "%.2f"|format(el.price) }}</small>
-                        <span class="fs-5 fw-bold text-danger">${{ "%.2f"|format(el.discounted_price) }}</span>
-                      {% else %}
-                        <span class="fs-5 fw-bold">${{ "%.2f"|format(el.price) }}</span>
-                      {% endif %}
-                    </div>
-                    <div class="btn-group">
-                      <a href="/remove_from_cart/{{ el.id }}" 
-                         class="btn btn-outline-secondary rounded-start-pill" 
-                         {% if not session.get('cart', {}).get(el.id|string, 0) %}style="display: none"{% endif %}>
-                         <i class="bi bi-dash"></i>
-                      </a>
-                      <span class="btn btn-outline-secondary disabled">
-                        {{ session.get('cart', {}).get(el.id|string, 0) or 0 }}
-                      </span>
-                      <a href="/add_to_cart/{{ el.id }}" 
-                         class="btn btn-outline-secondary rounded-end-pill">
-                         <i class="bi bi-plus"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        {% if items %}
+          {% for item in items %}
+            <div class="col-md-4 mb-4">
+              {% include 'components/product/card.html' with context %}
             </div>
-          </div>
           {% endfor %}
         {% else %}
-          <div class="col-12 text-center py-5">
-            <div class="py-5">
-              <i class="bi bi-emoji-frown display-1 text-muted mb-4"></i>
-              <h3 class="text-muted">Пока тут пусто...</h3>
-              <p class="text-muted">В данной категории еще нет товаров</p>
+          <div class="col-12 text-center">
+            <div class="empty-state">
+              <div class="empty-state-icon">😕</div>
+              <h2>Nothing here yet...</h2>
+              <p>There are no products in this category</p>
             </div>
           </div>
         {% endif %}
@@ -119,77 +68,154 @@
   </div>
 </div>
 
-<!-- Modal for each product -->
-{% for el in data %}
-<div class="modal fade" id="modal-{{ el.id }}" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content border-0 rounded-4 overflow-hidden">
-      <div class="modal-body p-0">
-        <div class="row g-0">
-          <div class="col-md-6">
-            {% if el.image_path %}
-            <img src="{{ url_for('static', filename=el.image_path) }}"
-                 class="w-100 h-100"
-                 style="object-fit: cover;"
-                 alt="{{ el.title }}">
-            {% endif %}
-          </div>
-          <div class="col-md-6 p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                {% if el.subcategory %}
-                <small class="text-muted d-block">{{ el.subcategory.category.name }} - {{ el.subcategory.name }}</small>
-                {% endif %}
-                <h3 class="mb-2">{{ el.title }}</h3>
-              </div>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <p class="text-muted mb-4">{{ el.description }}</p>
-            
-            <div class="mb-4">
-              <h5 class="mb-3">Характеристики:</h5>
-              <div class="d-flex justify-content-between border-bottom py-2">
-                <span class="text-muted">Вес:</span>
-                <span>{{ el.weight }} г</span>
-              </div>
-              {% if el.amount %}
-              <div class="d-flex justify-content-between border-bottom py-2">
-                <span class="text-muted">В наличии:</span>
-                <span>{{ el.amount }} шт</span>
-              </div>
-              {% endif %}
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                {% if el.discount %}
-                  <small class="text-muted text-decoration-line-through">${{ "%.2f"|format(el.price) }}</small>
-                  <span class="fs-5 fw-bold text-danger">${{ "%.2f"|format(el.discounted_price) }}</span>
-                {% else %}
-                  <span class="fs-5 fw-bold">${{ "%.2f"|format(el.price) }}</span>
-                {% endif %}
-              </div>
-              <div class="btn-group">
-                <a href="/remove_from_cart/{{ el.id }}" 
-                   class="btn btn-outline-secondary rounded-start-pill" 
-                   {% if not session.get('cart', {}).get(el.id|string, 0) %}style="display: none"{% endif %}>
-                   <i class="bi bi-dash"></i>
-                </a>
-                <span class="btn btn-outline-secondary disabled">
-                  {{ session.get('cart', {}).get(el.id|string, 0) or 0 }}
-                </span>
-                <a href="/add_to_cart/{{ el.id }}" 
-                   class="btn btn-outline-secondary rounded-end-pill">
-                   <i class="bi bi-plus"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Product Modals -->
+{% for item in items %}
+  {% include 'components/product/modal.html' %}
 {% endfor %}
+
+<script>
+function updateCartUI(data) {
+    // Обновляем количество товаров в корзине
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    cartCountElements.forEach(el => el.textContent = data.cart_count);
+
+    // Обновляем отображение в карточке товара
+    const card = document.querySelector(`[data-product-id="${data.item_id}"]`);
+    if (card) {
+        const removeBtn = card.querySelector('.btn-outline-primary[onclick*="removeFromCart"]');
+        const countSpan = card.querySelector('.btn-outline-primary.disabled');
+        if (removeBtn) {
+            removeBtn.style.display = data.cart_count > 0 ? '' : 'none';
+        }
+        if (countSpan) {
+            countSpan.textContent = data.cart_count;
+        }
+    }
+
+    // Обновляем боковую корзину
+    const cartItems = document.querySelector('.cart-items');
+    if (cartItems && data.cart_html) {
+        cartItems.innerHTML = data.cart_html;
+    }
+
+    // Обновляем футер корзины
+    const cartFooter = document.querySelector('.cart-footer');
+    if (data.cart_count > 0) {
+        if (!cartFooter) {
+            // Если футера нет, создаем его
+            const sideCart = document.querySelector('.side-cart');
+            if (sideCart) {
+                sideCart.insertAdjacentHTML('beforeend', `
+                    <div class="cart-footer mt-auto">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Итого:</span>
+                            <span class="fw-bold">$${data.cart_total.toFixed(2)}</span>
+                        </div>
+                        <a href="/cart" class="btn btn-primary w-100">Оформить заказ</a>
+                    </div>
+                `);
+            }
+        } else {
+            // Если футер есть, обновляем сумму
+            const totalElement = cartFooter.querySelector('.fw-bold');
+            if (totalElement) {
+                totalElement.textContent = `$${data.cart_total.toFixed(2)}`;
+            }
+        }
+    } else {
+        // Если корзина пуста, удаляем футер
+        if (cartFooter) {
+            cartFooter.remove();
+        }
+    }
+
+    // Обновляем отображение пустой корзины
+    if (data.cart_count === 0 && cartItems) {
+        cartItems.innerHTML = `
+            <div class="text-center py-5">
+                <p class="text-muted">Корзина пуста</p>
+            </div>
+        `;
+    }
+}
+
+function addToCart(itemId) {
+    fetch(`/add_to_cart/${itemId}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateCartUI({
+                item_id: itemId,
+                cart_count: data.cart_count,
+                cart_html: data.cart_html,
+                cart_total: data.cart_total
+            });
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function removeFromCart(itemId) {
+    fetch(`/remove_from_cart/${itemId}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateCartUI({
+                item_id: itemId,
+                cart_count: data.cart_count,
+                cart_html: data.cart_html,
+                cart_total: data.cart_total
+            });
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function openProductModal(itemId) {
+    const modal = new bootstrap.Modal(document.getElementById(`productModal-${itemId}`));
+    modal.show();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add handlers for product cards
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.product-footer')) {
+                const id = card.getAttribute('data-product-id');
+                openProductModal(id);
+            }
+        });
+    });
+
+    // Prevent modal from closing when clicking inside
+    document.querySelectorAll('.product-modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target.closest('.btn-group') || e.target.closest('.related-product')) {
+                e.stopPropagation();
+            }
+        });
+
+        // Add hidden.bs.modal event handler
+        modal.addEventListener('hidden.bs.modal', function() {
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    });
+});
+</script>
 {% endblock %}

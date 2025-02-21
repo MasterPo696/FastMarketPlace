@@ -26,7 +26,7 @@ class ImageHandler:
         except Exception as e:
             return extension in ALLOWED_EXTENSIONS
 
-    def handle_image_upload(self, file):
+    def handle_image_upload(self, file, custom_filename=None):
         if not file or file.filename == '':
             return None, "No selected file", 400
             
@@ -34,7 +34,7 @@ class ImageHandler:
             return None, "Invalid file type. Allowed types are: png, jpg, jpeg, gif", 400
             
         try:
-            filename = secure_filename(file.filename)
+            filename = custom_filename if custom_filename else secure_filename(file.filename)
             os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return f'images/{filename}', None, None

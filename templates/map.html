@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Map</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet Geocoder CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+        }
+        #map { 
+            height: 100vh; 
+            width: 100%; 
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    
+    <script>
+        let map, marker;
+
+        function initMap() {
+            // Initialize map centered on Moscow
+            map = L.map('map').setView([55.7558, 37.6173], 11);
+            
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add search control
+            const searchControl = L.Control.geocoder({
+                defaultMarkGeocode: false
+            }).addTo(map);
+
+            // Handle search results
+            searchControl.on('markgeocode', function(e) {
+                const location = e.geocode.center;
+                updateMarker(location);
+                map.setView(location, 15);
+            });
+
+            // Handle map clicks
+            map.on('click', function(e) {
+                updateMarker(e.latlng);
+            });
+        }
+
+        function updateMarker(latlng) {
+            // Update or create marker
+            if (marker) {
+                marker.setLatLng(latlng);
+            } else {
+                marker = L.marker(latlng, {draggable: true}).addTo(map);
+                marker.on('dragend', function() {
+                    const pos = marker.getLatLng();
+                    updateMarker(pos);
+                });
+            }
+
+            // Reverse geocode to get address
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latlng.lat}&lon=${latlng.lng}&format=json`)
+                .then(response => response.json())
+                .then(data => {
+                    marker.bindPopup(data.display_name).openPopup();
+                });
+        }
+
+        // Initialize map when page loads
+        window.addEventListener('load', initMap);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,18 @@
+{% if el.isAvailable and el.amount > 0 %}
+<div class="btn-group w-100">
+  <a href="/remove_from_cart/{{ el.id }}" 
+    class="btn btn-outline-primary rounded-start-pill"
+    {% if not session.get('cart', {}).get(el.id|string, 0) %}style="display: none"{% endif %}>
+    <i class="bi bi-dash"></i>
+  </a>
+  <span class="btn btn-outline-primary disabled">
+    {{ session.get('cart', {}).get(el.id|string, 0) or 0 }}
+  </span>
+  <a href="/add_to_cart/{{ el.id }}" 
+    class="btn btn-outline-primary rounded-end-pill">
+    <i class="bi bi-plus"></i>
+  </a>
+</div>
+{% else %}
+<button class="btn btn-secondary w-100" disabled>Out of Stock</button>
+{% endif %} 

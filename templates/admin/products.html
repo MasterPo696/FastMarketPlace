@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Admin - Products</title>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Products Management</h2>
+        <a href="{{ url_for('admin_create_product') }}" class="btn btn-primary">Add Product</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        <img src="{{ url_for('static', filename=item.image_path) }}" 
+                             alt="{{ item.title }}" 
+                             style="width: 50px; height: 50px; object-fit: cover;">
+                    </td>
+                    <td>{{ item.title }}</td>
+                    <td>${{ "%.2f"|format(item.price) }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.subcategory.category.name }}</td>
+                    <td>
+                        <a href="{{ url_for('admin_edit_product', id=item.id) }}" 
+                           class="btn btn-sm btn-outline-primary">Edit</a>
+                        <button onclick="deleteProduct({{ item.id }})" 
+                                class="btn btn-sm btn-outline-danger">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Existing delete functionality
+let deleteProductId = null;
+const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+
+function deleteProduct(productId) {
+    deleteProductId = productId;
+    deleteModal.show();
+}
+
+// Add the rest of your JavaScript code here (sorting, filtering, pagination)
+// ... (copy the JavaScript from create.html)
+
+// Category-Subcategory relationship
+document.getElementById('category').addEventListener('change', function() {
+    const categoryId = this.value;
+    const subcategorySelect = document.getElementById('subcategory');
+    
+    subcategorySelect.innerHTML = '<option value="">Select subcategory</option>';
+    
+    if (categoryId) {
+        fetch(`/get_subcategories/${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.id;
+                    option.textContent = subcategory.name;
+                    subcategorySelect.appendChild(option);
+                });
+            });
+    }
+});
+
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+});
+</script>
+{% endblock %} 

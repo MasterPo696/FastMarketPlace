@@ -1,3 +1,5 @@
 __pycache__/
+__pycache__
 config.toml
 venv/
+.DS_Store

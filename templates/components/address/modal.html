@@ -1,0 +1,210 @@
+<style>
+    #addressMap {
+        height: 400px !important;
+        width: 100%;
+        position: relative !important;
+        z-index: 1051 !important;
+    }
+    .modal-dialog {
+        max-width: 800px;
+    }
+    .leaflet-control-geocoder,
+    .leaflet-control-container {
+        z-index: 1052 !important;
+    }
+    .modal-content {
+        overflow: visible !important;
+    }
+    .modal {
+        z-index: 1050 !important;
+    }
+</style>
+
+<div class="modal fade" id="addressModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content rounded-4 border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Адрес доставки</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="map-container mb-4">
+          <div id="addressMap"></div>
+        </div>
+        
+        <input type="text" 
+               id="searchInput" 
+               class="form-control form-control-lg rounded-3 mb-3" 
+               placeholder="Поиск адреса">
+        
+        <form id="addressForm" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Адрес</label>
+            <input type="text" 
+                   class="form-control form-control-lg rounded-3" 
+                   id="addressInput" 
+                   readonly 
+                   required>
+          </div>
+          
+          <div id="additionalFields">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input type="text" 
+                         class="form-control rounded-3" 
+                         id="buildingInput" 
+                         placeholder="Корпус">
+                  <label for="buildingInput">Корпус</label>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input type="number" 
+                         class="form-control rounded-3" 
+                         id="floorInput" 
+                         placeholder="Этаж">
+                  <label for="floorInput">Этаж</label>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input type="text" 
+                         class="form-control rounded-3" 
+                         id="apartmentInput" 
+                         placeholder="Квартира">
+                  <label for="apartmentInput">Квартира</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer border-0">
+        <button type="button" 
+                class="btn btn-light rounded-3" 
+                data-bs-dismiss="modal">
+          Отмена
+        </button>
+        <button type="button" 
+                class="btn btn-primary rounded-3" 
+                onclick="saveAddress()"
+                id="saveAddressBtn">
+          Сохранить адрес
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let map, marker;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addressModal = document.getElementById('addressModal');
+    if (addressModal) {
+        addressModal.addEventListener('shown.bs.modal', function() {
+            setTimeout(() => {
+                if (!map) {
+                    initMap();
+                }
+                if (map) {
+                    map.invalidateSize();
+                }
+            }, 300);
+        });
+    }
+});
+
+function initMap() {
+    try {
+        map = L.map('addressMap', {
+            zoomControl: true,
+            scrollWheelZoom: true
+        }).setView([55.7558, 37.6173], 11);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        const searchControl = L.Control.geocoder({
+            defaultMarkGeocode: false,
+            position: 'topleft',
+            placeholder: 'Поиск адреса...',
+            errorMessage: 'Адрес не найден'
+        }).addTo(map);
+
+        searchControl.on('markgeocode', function(e) {
+            const location = e.geocode.center;
+            updateMarkerAndAddress(location);
+            map.setView(location, 15);
+        });
+
+        map.on('click', function(e) {
+            updateMarkerAndAddress(e.latlng);
+        });
+
+    } catch (error) {
+        console.error('Error initializing map:', error);
+    }
+}
+
+function updateMarkerAndAddress(latlng) {
+    // Update or create marker
+    if (marker) {
+        marker.setLatLng(latlng);
+    } else {
+        marker = L.marker(latlng, {draggable: true}).addTo(map);
+        marker.on('dragend', function() {
+            const pos = marker.getLatLng();
+            updateMarkerAndAddress(pos);
+        });
+    }
+
+    document.getElementById('additionalFields').style.display = 'block';
+    document.getElementById('saveAddressBtn').disabled = false;
+
+    // Reverse geocode to get address
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latlng.lat}&lon=${latlng.lng}&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('addressInput').value = data.display_name;
+        });
+}
+
+function saveAddress() {
+    if (!marker) {
+        alert('Пожалуйста, выберите точку на карте');
+        return;
+    }
+
+    const position = marker.getLatLng();
+    const addressData = {
+        address: document.getElementById('addressInput').value,
+        building: document.getElementById('buildingInput').value,
+        floor: document.getElementById('floorInput').value,
+        apartment: document.getElementById('apartmentInput').value,
+        coordinates: {
+            lat: position.lat,
+            lng: position.lng
+        }
+    };
+
+    fetch('/save_address', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(addressData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+</script> 

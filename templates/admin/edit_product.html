@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Edit Product - {{ item.title }}</title>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 rounded-4 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Edit Product</h2>
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control" name="title" 
+                                           value="{{ item.title }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-select" name="subcategory_id" required>
+                                        {% for category in categories %}
+                                            <optgroup label="{{ category.name }}">
+                                            {% for subcategory in category.subcategories %}
+                                                <option value="{{ subcategory.id }}"
+                                                        {% if subcategory.id == item.subcategory_id %}selected{% endif %}>
+                                                    {{ subcategory.name }}
+                                                </option>
+                                            {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" 
+                                              rows="3" required>{{ item.description }}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Price</label>
+                                    <input type="number" class="form-control" name="price" 
+                                           value="{{ item.price }}" step="0.01" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Discount (%)</label>
+                                    <input type="number" class="form-control" name="discount" 
+                                           value="{{ item.discount }}" min="0" max="100" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Weight (g)</label>
+                                    <input type="number" class="form-control" name="weight" 
+                                           value="{{ item.weight }}" step="0.1" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Stock Amount</label>
+                                    <input type="number" class="form-control" name="amount" 
+                                           value="{{ item.amount }}" min="0" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Image</label>
+                                    <input type="file" class="form-control" name="image" accept="image/*">
+                                    {% if item.image_path %}
+                                    <small class="text-muted">Leave empty to keep current image</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{{ url_for('admin_products') }}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,40 @@
+<div class="related-products p-4 border-top">
+  <h6 class="mb-3">You might also like</h6>
+  <div class="row g-3">
+    {% set counter = namespace(value=0) %}
+    {% for related in data if related.id != el.id %}
+      {% if counter.value < 3 %}
+        {% set counter.value = counter.value + 1 %}
+        <div class="col-4">
+          <div class="related-product rounded bg-light p-3">
+            <div class="position-relative mb-2">
+              {% if related.image_path %}
+              <img src="{{ url_for('static', filename=related.image_path) }}" 
+                  class="img-fluid rounded" 
+                  alt="{{ related.title }}"
+                  style="height: 140px; width: 100%; object-fit: contain; background-color: #ffffff;">
+              {% endif %}
+            </div>
+            <div class="related-product-info">
+              <h6 class="mb-1 text-truncate" style="font-size: 0.9rem;">{{ related.title }}</h6>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="price-block" style="font-size: 0.8rem;">
+                  {% if related.discount %}
+                  <small class="text-muted text-decoration-line-through">${{ "%.2f"|format(related.price) }}</small>
+                  <span class="text-danger">${{ "%.2f"|format(related.discounted_price) }}</span>
+                  {% else %}
+                  <span>${{ "%.2f"|format(related.price) }}</span>
+                  {% endif %}
+                </div>
+                <a href="/add_to_cart/{{ related.id }}" 
+                  class="btn btn-sm btn-outline-primary rounded-circle">
+                  <i class="bi bi-plus"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div> 

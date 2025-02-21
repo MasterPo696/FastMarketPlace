@@ -46,9 +46,11 @@ target_db = current_app.extensions['migrate'].db
 
 
 def get_metadata():
-    if hasattr(target_db, 'metadatas'):
-        return target_db.metadatas[None]
-    return target_db.metadata
+    # Возвращает метаданные для всех моделей
+    metadata = []
+    for bind in current_app.config.get('SQLALCHEMY_BINDS', {}).keys():
+        metadata.append(db.get_metadata(bind=bind))
+    return metadata
 
 
 def run_migrations_offline():
