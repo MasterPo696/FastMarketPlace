@@ -12,23 +12,18 @@
                 <div class="card-body p-4">
                     <h2 class="text-center mb-4">Login</h2>
                     
-                    <form method="post">
-                        <div class="mb-3">
-                            <label class="form-label">Email or Phone</label>
-                            <input type="text" name="identifier" class="form-control" required>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="identifier">Email</label>
+                            <input type="email" class="form-control" id="identifier" name="identifier" 
+                                   placeholder="admin@admin" required>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" required>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Enter your password" required>
                         </div>
-                        
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" name="remember" class="form-check-input" id="remember">
-                            <label class="form-check-label" for="remember">Remember me</label>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
                     </form>
                     
                     <div class="text-center mt-3">

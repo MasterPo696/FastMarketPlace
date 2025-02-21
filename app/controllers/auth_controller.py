@@ -3,73 +3,52 @@ from app.models.user_models import User
 from app.auth import send_verification_code, get_current_user
 from app.config import db
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class AuthController:
     @staticmethod
     def login():
+        """Handle user login"""
         if request.method == 'POST':
             identifier = request.form.get('identifier')
             password = request.form.get('password')
-            remember = request.form.get('remember', False)
             
-            user = User.query.filter(
-                (User.email == identifier) | (User.phone == identifier)
-            ).first()
+            # Ищем пользователя только по email
+            user = User.query.filter_by(email=identifier).first()
             
             if user and user.check_password(password):
-                if not user.is_active:
-                    flash('Please verify your account first', 'warning')
-                    return redirect(url_for('verify', user_id=user.id))
-                    
                 session['user_id'] = user.id
-                
-                if remember:
-                    user.generate_auth_token()
-                    db.session.commit()
-                    
-                    response = redirect(request.args.get('next') or '/')
-                    response.set_cookie('remember_token', user.auth_token, 
-                                     max_age=30*24*60*60, httponly=True)
-                    return response
-                    
-                return redirect(request.args.get('next') or '/')
-                
-            flash('Invalid credentials', 'error')
-        
+                session.permanent = True
+                flash('Successfully logged in!', 'success')
+                return redirect(url_for('index'))
+            
+            flash('Invalid email or password', 'error')
+            
         return render_template('auth/login.html')
 
     @staticmethod
     def register():
+        """Handle user registration"""
         if request.method == 'POST':
-            name = request.form.get('name')
-            identifier = request.form.get('identifier')
+            email = request.form.get('email')
             password = request.form.get('password')
             
-            is_email = '@' in identifier
+            if User.query.filter_by(email=email).first():
+                flash('Email already registered', 'error')
+                return redirect(url_for('register'))
             
-            existing_user = User.query.filter(
-                (User.email == identifier if is_email else User.phone == identifier)
-            ).first()
-            
-            if existing_user:
-                flash('User already exists', 'error')
-                return redirect(url_for('login'))
-                
-            user = User(
-                name=name,
-                email=identifier if is_email else None,
-                phone=identifier if not is_email else None,
-                is_active=False
-            )
+            user = User(email=email)
             user.set_password(password)
             
-            db.session.add(user)
-            db.session.commit()
-            
-            send_verification_code(user)
-            
-            return redirect(url_for('verify', user_id=user.id))
-            
+            try:
+                db.session.add(user)
+                db.session.commit()
+                flash('Registration successful! Please login.', 'success')
+                return redirect(url_for('login'))
+            except Exception as e:
+                db.session.rollback()
+                flash('Registration failed. Please try again.', 'error')
+                
         return render_template('auth/register.html')
 
     @staticmethod
@@ -95,7 +74,7 @@ class AuthController:
 
     @staticmethod
     def logout():
+        """Handle user logout"""
         session.pop('user_id', None)
-        response = redirect('/')
-        response.delete_cookie('remember_token')
-        return response 
+        flash('Successfully logged out!', 'success')
+        return redirect(url_for('index')) 

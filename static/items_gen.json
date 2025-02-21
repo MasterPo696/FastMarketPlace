@@ -1,0 +1,804 @@
+{
+    "items": [
+        {
+            "name": "Banana",
+            "description": "Naturally sweet and healthy snacking fruit.",
+            "price": 250,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Fresh Fruits",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/banana.jpg"
+        },
+        {
+            "name": "Apple",
+            "description": "Versatile and nutritious fruit rich in antioxidants.",
+            "price": 300,
+            "weight": 0.7,
+            "discount": 20,
+            "subcategory": "Fresh Fruits",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/apple.jpg"
+        },
+        {
+            "name": "Orange",
+            "description": "Citrus fruit high in vitamin C and great for immunity.",
+            "price": 280,
+            "weight": 0.6,
+            "discount": 15,
+            "subcategory": "Fresh Fruits",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/orange.jpg"
+        },
+        {
+            "name": "Organic Dried Apricots",
+            "description": "Naturally sweet and chewy dried apricots, rich in fiber and vitamins.",
+            "price": 5.99,
+            "weight": 0.25,
+            "discount": 10,
+            "subcategory": "Dried Fruits and Nuts",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/organic_dried_apricots.png"
+        },
+        {
+            "name": "Raw Almonds",
+            "description": "Crispy and fresh raw almonds with no additives or preservatives.",
+            "price": 8.99,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Dried Fruits and Nuts",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/raw_almonds.jpg"
+        },
+        {
+            "name": "Turkish Walnuts",
+            "description": "Premium quality walnuts from Turkey, rich in omega-3 fatty acids.",
+            "price": 6.49,
+            "weight": 0.3,
+            "discount": 20,
+            "subcategory": "Dried Fruits and Nuts",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/turkish_walnuts.png"
+        },
+        {
+            "name": "Durian",
+            "description": "A spiky fruit known for its strong odor and creamy texture.",
+            "price": 56.99,
+            "weight": 2.5,
+            "discount": 10,
+            "subcategory": "Exotic Fruits",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/durian.jpg"
+        },
+        {
+            "name": "Rambutan",
+            "description": "A tropical fruit covered with soft spines, similar to lychee.",
+            "price": 34.99,
+            "weight": 1.5,
+            "discount": 20,
+            "subcategory": "Exotic Fruits",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/rambutan.jpg"
+        },
+        {
+            "name": "Dragon Fruit",
+            "description": "A brightly colored fruit with sweet flesh and small black seeds.",
+            "price": 29.99,
+            "weight": 1.2,
+            "discount": 0,
+            "subcategory": "Exotic Fruits",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/dragon_fruit.jpg"
+        },
+        {
+            "name": "Tomato",
+            "description": "Juicy red tomatoes perfect for salads and sauces.",
+            "price": 2.5,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Fresh Vegetables",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/tomato.jpg"
+        },
+        {
+            "name": "Carrot",
+            "description": "Crunchy carrots ideal for snacking or cooking.",
+            "price": 1.0,
+            "weight": 0.3,
+            "discount": 5,
+            "subcategory": "Fresh Vegetables",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/carrot.jpg"
+        },
+        {
+            "name": "Broccoli",
+            "description": "Nutritious broccoli florets great for stir-fries and salads.",
+            "price": 3.0,
+            "weight": 0.6,
+            "discount": 0,
+            "subcategory": "Fresh Vegetables",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/broccoli.jpg"
+        },
+        {
+            "name": "Romaine Lettuce",
+            "description": "Crisp and nutritious lettuce variety.",
+            "price": 2.5,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Leafy Greens",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/romaine_lettuce.jpg"
+        },
+        {
+            "name": "Spinach",
+            "description": "Packed with vitamins and minerals.",
+            "price": 1.75,
+            "weight": 0.4,
+            "discount": 5,
+            "subcategory": "Leafy Greens",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/spinach.jpg"
+        },
+        {
+            "name": "Kale",
+            "description": "Versatile leafy green superfood.",
+            "price": 3.0,
+            "weight": 0.6,
+            "discount": 20,
+            "subcategory": "Leafy Greens",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/kale.jpg"
+        },
+        {
+            "name": "White Button Mushrooms",
+            "description": "Premium quality white button mushrooms with a fresh and earthy flavor.",
+            "price": 2.5,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Mushrooms",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/white_button_mushrooms.png"
+        },
+        {
+            "name": "Shiitake Mushrooms",
+            "description": "Rich and savory shiitake mushrooms known for their umami taste.",
+            "price": 4.0,
+            "weight": 0.3,
+            "discount": 10,
+            "subcategory": "Mushrooms",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/shiitake_mushrooms.jpg"
+        },
+        {
+            "name": "Portobello Mushrooms",
+            "description": "Large and meaty portobello mushrooms perfect for grilling or stuffing.",
+            "price": 3.75,
+            "weight": 0.6,
+            "discount": 0,
+            "subcategory": "Mushrooms",
+            "category": "Fruits and Vegetables",
+            "image_path": "product_images/portobello_mushrooms.jpg"
+        },
+        {
+            "name": "Premium Beef Steak",
+            "description": "Tender and juicy beef steaks from grass-fed cattle.",
+            "price": 25.99,
+            "weight": 1.0,
+            "discount": 10,
+            "subcategory": "Fresh Meat",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/premium_beef_steak.jpg"
+        },
+        {
+            "name": "Organic Chicken Breasts",
+            "description": "All-natural chicken breasts free from antibiotics and hormones.",
+            "price": 7.99,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Fresh Meat",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/organic_chicken_breasts.jpg"
+        },
+        {
+            "name": "Wild Caught Salmon Fillet",
+            "description": "Rich in omega-3 fatty acids, wild caught salmon fillet.",
+            "price": 14.99,
+            "weight": 0.8,
+            "discount": 5,
+            "subcategory": "Fresh Meat",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/wild_caught_salmon_fillet.jpg"
+        },
+        {
+            "name": "Organic Free-Range Chicken Breasts",
+            "description": "Natural, hormone-free chicken breasts from free-range chickens.",
+            "price": 8.99,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Poultry",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/organic_free-range_chicken_breasts.jpg"
+        },
+        {
+            "name": "Grilled Chicken Wings",
+            "description": "Juicy grilled chicken wings, perfect for parties or snacks.",
+            "price": 6.49,
+            "weight": 0.25,
+            "discount": 20,
+            "subcategory": "Poultry",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/grilled_chicken_wings.jpg"
+        },
+        {
+            "name": "Whole Roasted Turkey",
+            "description": "Delicious whole roasted turkey for holiday meals.",
+            "price": 49.99,
+            "weight": 5,
+            "discount": 0,
+            "subcategory": "Poultry",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/whole_roasted_turkey.jpg"
+        },
+        {
+            "name": "Salmon Fillet",
+            "description": "Fresh wild caught salmon fillet, rich in omega-3 fatty acids.",
+            "price": 8.99,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Fish and Seafood",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/salmon_fillet.jpg"
+        },
+        {
+            "name": "Tuna Steak",
+            "description": "High quality tuna steaks, perfect for grilling or pan searing.",
+            "price": 12.99,
+            "weight": 0.7,
+            "discount": 20,
+            "subcategory": "Fish and Seafood",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/tuna_steak.jpg"
+        },
+        {
+            "name": "Shrimp Cocktail",
+            "description": "Fresh shrimp cocktail, tail-on, ready to serve with your favorite dipping sauce.",
+            "price": 14.99,
+            "weight": 0.4,
+            "discount": 0,
+            "subcategory": "Fish and Seafood",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/shrimp_cocktail.jpg"
+        },
+        {
+            "name": "Pre-cooked Chicken Meatballs",
+            "description": "Delicious pre-cooked chicken meatballs, ready to heat and serve.",
+            "price": 50.99,
+            "weight": 0.45,
+            "discount": 20,
+            "subcategory": "Processed and Semi-finished Products",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/pre-cooked_chicken_meatballs.jpg"
+        },
+        {
+            "name": "Smoked Sausages",
+            "description": "High-quality smoked sausages made from pork and beef, perfect for grilling or serving with sides.",
+            "price": 75.99,
+            "weight": 0.6,
+            "discount": 15,
+            "subcategory": "Processed and Semi-finished Products",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/smoked_sausages.jpg"
+        },
+        {
+            "name": "Frozen Ground Turkey Patties",
+            "description": "Convenient frozen ground turkey patties, great for quick meals.",
+            "price": 39.99,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Processed and Semi-finished Products",
+            "category": "Meat, Fish, and Poultry",
+            "image_path": "product_images/frozen_ground_turkey_patties.jpg"
+        },
+        {
+            "name": "Whole Milk",
+            "description": "Rich and creamy whole milk with no additives.",
+            "price": 2.5,
+            "weight": 1,
+            "discount": 0,
+            "subcategory": "Milk and Cream",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/whole_milk.jpg"
+        },
+        {
+            "name": "Heavy Whipping Cream",
+            "description": "Premium heavy whipping cream for culinary use.",
+            "price": 4.0,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Milk and Cream",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/heavy_whipping_cream.jpg"
+        },
+        {
+            "name": "Organic Skim Milk",
+            "description": "Low-fat organic skim milk with no added sugar.",
+            "price": 1.75,
+            "weight": 1,
+            "discount": 5,
+            "subcategory": "Milk and Cream",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/organic_skim_milk.jpg"
+        },
+        {
+            "name": "Premium Parmesan Cheese",
+            "description": "Authentic Italian Parmesan cheese, finely grated.",
+            "price": 25.99,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Cheese and Butter",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/premium_parmesan_cheese.jpg"
+        },
+        {
+            "name": "Organic Salted Butter",
+            "description": "Organic butter from grass-fed cows.",
+            "price": 4.99,
+            "weight": 0.25,
+            "discount": 0,
+            "subcategory": "Cheese and Butter",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/organic_salted_butter.jpg"
+        },
+        {
+            "name": "French Brie Cheese",
+            "description": "Traditional French brie cheese, matured to perfection.",
+            "price": 8.99,
+            "weight": 0.4,
+            "discount": 5,
+            "subcategory": "Cheese and Butter",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/french_brie_cheese.jpg"
+        },
+        {
+            "name": "Premium Greek Yogurt",
+            "description": "Rich and creamy Greek yogurt with live cultures.",
+            "price": 5.99,
+            "weight": 1.0,
+            "discount": 10,
+            "subcategory": "Yogurt and Desserts",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/premium_greek_yogurt.jpg"
+        },
+        {
+            "name": "Vanilla Bean Cheesecake",
+            "description": "Classic cheesecake with real vanilla beans.",
+            "price": 24.99,
+            "weight": 1.5,
+            "discount": 20,
+            "subcategory": "Yogurt and Desserts",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/vanilla_bean_cheesecake.jpg"
+        },
+        {
+            "name": "Fruit Crumble with Yogurt Topping",
+            "description": "Fresh fruit topped with yogurt and crumble mixture.",
+            "price": 7.99,
+            "weight": 0.8,
+            "discount": 0,
+            "subcategory": "Yogurt and Desserts",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/fruit_crumble_with_yogurt_topping.jpg"
+        },
+        {
+            "name": "Organic Free Range Eggs",
+            "description": "Natural, healthy eggs from free range hens.",
+            "price": 2.5,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Eggs",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/organic_free_range_eggs.jpg"
+        },
+        {
+            "name": "Cage Free Eggs",
+            "description": "Humanely produced cage free eggs.",
+            "price": 1.75,
+            "weight": 0.4,
+            "discount": 5,
+            "subcategory": "Eggs",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/cage_free_eggs.jpg"
+        },
+        {
+            "name": "Omlette Eggs",
+            "description": "Perfectly sized omlette eggs for your breakfast needs.",
+            "price": 3.0,
+            "weight": 0.6,
+            "discount": 15,
+            "subcategory": "Eggs",
+            "category": "Dairy and Eggs",
+            "image_path": "product_images/omlette_eggs.jpg"
+        },
+        {
+            "name": "Rye Bread",
+            "description": "Traditional rye bread made with sourdough starter.",
+            "price": 2.5,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Fresh Bread and Bakery",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/rye_bread.jpg"
+        },
+        {
+            "name": "Multigrain Loaf",
+            "description": "Healthy multigrain loaf with a mix of whole grains.",
+            "price": 3.0,
+            "weight": 0.7,
+            "discount": 20,
+            "subcategory": "Fresh Bread and Bakery",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/multigrain_loaf.jpg"
+        },
+        {
+            "name": "Plain Croissant",
+            "description": "Classic plain croissant, flaky and buttery.",
+            "price": 1.8,
+            "weight": 0.2,
+            "discount": 0,
+            "subcategory": "Fresh Bread and Bakery",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/plain_croissant.jpg"
+        },
+        {
+            "name": "Red Velvet Cake",
+            "description": "A classic red velvet cake with rich cream cheese frosting.",
+            "price": 50.0,
+            "weight": 2.0,
+            "discount": 10,
+            "subcategory": "Cakes and Pastries",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/red_velvet_cake.png"
+        },
+        {
+            "name": "Vanilla Cupcakes",
+            "description": "Soft vanilla cupcakes topped with buttercream icing.",
+            "price": 25.0,
+            "weight": 0.4,
+            "discount": 5,
+            "subcategory": "Cakes and Pastries",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/vanilla_cupcakes.jpg"
+        },
+        {
+            "name": "Cheesecake with Strawberries",
+            "description": "Creamy cheesecake with fresh strawberries on top.",
+            "price": 60.0,
+            "weight": 3.0,
+            "discount": 20,
+            "subcategory": "Cakes and Pastries",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/cheesecake_with_strawberries.jpg"
+        },
+        {
+            "name": "Organic Oats",
+            "description": "100% pure organic oats, rich in fiber and nutrients.",
+            "price": 4.5,
+            "weight": 1.0,
+            "discount": 10,
+            "subcategory": "Cereals and Grains",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/organic_oats.jpg"
+        },
+        {
+            "name": "Multigrain Breakfast Cereal",
+            "description": "A blend of wheat, barley, and rice flakes with added vitamins.",
+            "price": 3.2,
+            "weight": 0.5,
+            "discount": 5,
+            "subcategory": "Cereals and Grains",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/multigrain_breakfast_cereal.jpg"
+        },
+        {
+            "name": "Quinoa",
+            "description": "Ancient grain high in protein and minerals.",
+            "price": 6.75,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Cereals and Grains",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/quinoa.jpg"
+        },
+        {
+            "name": "All-Purpose Flour",
+            "description": "High-quality all-purpose flour for baking and cooking.",
+            "price": 2.5,
+            "weight": 1.0,
+            "discount": 0,
+            "subcategory": "Flour and Baking Ingredients",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/all-purpose_flour.jpg"
+        },
+        {
+            "name": "Self-Rising Flour",
+            "description": "Specially formulated self-rising flour for baked goods.",
+            "price": 3.0,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Flour and Baking Ingredients",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/self-rising_flour.jpg"
+        },
+        {
+            "name": "Bread Flour",
+            "description": "Strong bread flour for making artisan loaves.",
+            "price": 4.0,
+            "weight": 2.0,
+            "discount": 10,
+            "subcategory": "Flour and Baking Ingredients",
+            "category": "Bread, Cereals, and Pastries",
+            "image_path": "product_images/bread_flour.jpg"
+        },
+        {
+            "name": "Pure Apple Juice",
+            "description": "Natural apple juice with no added sugar.",
+            "price": 5.99,
+            "weight": 1,
+            "discount": 0,
+            "subcategory": "Juices and Nectars",
+            "category": "Beverages",
+            "image_path": "product_images/pure_apple_juice.jpg"
+        },
+        {
+            "name": "Tropical Fruit Nectar",
+            "description": "A delicious blend of mango, pineapple, and orange.",
+            "price": 7.49,
+            "weight": 0.5,
+            "discount": 20,
+            "subcategory": "Juices and Nectars",
+            "category": "Beverages",
+            "image_path": "product_images/tropical_fruit_nectar.jpg"
+        },
+        {
+            "name": "Organic Pomegranate Juice",
+            "description": "Rich in antioxidants, unsweetened pomegranate juice.",
+            "price": 6.49,
+            "weight": 1,
+            "discount": 10,
+            "subcategory": "Juices and Nectars",
+            "category": "Beverages",
+            "image_path": "product_images/organic_pomegranate_juice.jpg"
+        },
+        {
+            "name": "Coca-Cola",
+            "description": "Classic carbonated soft drink.",
+            "price": 2.5,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Carbonated Drinks",
+            "category": "Beverages",
+            "image_path": "product_images/coca-cola.jpg"
+        },
+        {
+            "name": "Pepsi",
+            "description": "Popular cola beverage.",
+            "price": 2.75,
+            "weight": 0.5,
+            "discount": 15,
+            "subcategory": "Carbonated Drinks",
+            "category": "Beverages",
+            "image_path": "product_images/pepsi.jpg"
+        },
+        {
+            "name": "Sprite",
+            "description": "Refreshing lemon-lime soda.",
+            "price": 2.25,
+            "weight": 0.4,
+            "discount": 5,
+            "subcategory": "Carbonated Drinks",
+            "category": "Beverages",
+            "image_path": "product_images/sprite.jpg"
+        },
+        {
+            "name": "Premium Green Tea",
+            "description": "A superior blend of premium green tea leaves sourced from Japan.",
+            "price": 56.99,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Tea and Coffee",
+            "category": "Beverages",
+            "image_path": "product_images/premium_green_tea.jpg"
+        },
+        {
+            "name": "Espresso Blend Coffee",
+            "description": "A rich and bold espresso blend from Central America.",
+            "price": 12.49,
+            "weight": 0.25,
+            "discount": 5,
+            "subcategory": "Tea and Coffee",
+            "category": "Beverages",
+            "image_path": "product_images/espresso_blend_coffee.jpg"
+        },
+        {
+            "name": "Herbal Tea Sampler",
+            "description": "A variety pack of herbal teas with calming effects.",
+            "price": 8.99,
+            "weight": 0.3,
+            "discount": 0,
+            "subcategory": "Tea and Coffee",
+            "category": "Beverages",
+            "image_path": "product_images/herbal_tea_sampler.jpg"
+        },
+        {
+            "name": "Evian Natural Spring Water",
+            "description": "Premium bottled water from natural springs in France.",
+            "price": 2.5,
+            "weight": 0.5,
+            "discount": 10,
+            "subcategory": "Water and Mineral Drinks",
+            "category": "Beverages",
+            "image_path": "product_images/evian_natural_spring_water.jpg"
+        },
+        {
+            "name": "San Pellegrino Sparkling Mineral Water",
+            "description": "Italian sparkling mineral water with natural bubbles.",
+            "price": 3.0,
+            "weight": 0.75,
+            "discount": 15,
+            "subcategory": "Water and Mineral Drinks",
+            "category": "Beverages",
+            "image_path": "product_images/san_pellegrino_sparkling_mineral_water.jpg"
+        },
+        {
+            "name": "Vittel Still Mineral Water",
+            "description": "French still mineral water for hydration.",
+            "price": 1.75,
+            "weight": 1.0,
+            "discount": 0,
+            "subcategory": "Water and Mineral Drinks",
+            "category": "Beverages",
+            "image_path": "product_images/vittel_still_mineral_water.jpg"
+        },
+        {
+            "name": "Whiskey XYZ",
+            "description": "Aged in oak barrels for extra smoothness.",
+            "price": 56.99,
+            "weight": 0.75,
+            "discount": 20,
+            "subcategory": "Alcoholic Beverages",
+            "category": "Beverages",
+            "image_path": "product_images/whiskey_xyz.jpg"
+        },
+        {
+            "name": "Vodka Absolut",
+            "description": "Pure and crisp, perfect for cocktails.",
+            "price": 34.99,
+            "weight": 1.0,
+            "discount": 10,
+            "subcategory": "Alcoholic Beverages",
+            "category": "Beverages",
+            "image_path": "product_images/vodka_absolut.jpg"
+        },
+        {
+            "name": "Gin Bombay Sapphire",
+            "description": "Citrusy and floral, ideal for gin & tonics.",
+            "price": 48.99,
+            "weight": 0.7,
+            "discount": 15,
+            "subcategory": "Alcoholic Beverages",
+            "category": "Beverages",
+            "image_path": "product_images/gin_bombay_sapphire.jpg"
+        },
+        {
+            "name": "Tomato Soup",
+            "description": "Classic tomato soup can with premium ingredients.",
+            "price": 2.5,
+            "weight": 0.45,
+            "discount": 10,
+            "subcategory": "Canned and Preserved Foods",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/tomato_soup.jpg"
+        },
+        {
+            "name": "Beef Stew",
+            "description": "Hearty beef stew with vegetables, packed in a convenient can.",
+            "price": 3.75,
+            "weight": 0.5,
+            "discount": 20,
+            "subcategory": "Canned and Preserved Foods",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/beef_stew.jpg"
+        },
+        {
+            "name": "Mixed Fruit Jam",
+            "description": "Delicious mixed fruit jam made from fresh fruits.",
+            "price": 4.0,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Canned and Preserved Foods",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/mixed_fruit_jam.jpg"
+        },
+        {
+            "name": "Extra Virgin Olive Oil",
+            "description": "100% Pure and Natural Extra Virgin Olive Oil",
+            "price": 15.99,
+            "weight": 1,
+            "discount": 10,
+            "subcategory": "Oils and Sauces",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/extra_virgin_olive_oil.jpg"
+        },
+        {
+            "name": "Soy Sauce",
+            "description": "Authentic Japanese Soy Sauce, Gluten-Free",
+            "price": 6.49,
+            "weight": 0.5,
+            "discount": 5,
+            "subcategory": "Oils and Sauces",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/soy_sauce.jpg"
+        },
+        {
+            "name": "Peanut Oil",
+            "description": "High Smoke Point Peanut Oil for Frying",
+            "price": 8.99,
+            "weight": 2,
+            "discount": 0,
+            "subcategory": "Oils and Sauces",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/peanut_oil.jpg"
+        },
+        {
+            "name": "Black Peppercorns",
+            "description": "High-quality black peppercorns for enhancing flavors.",
+            "price": 5.99,
+            "weight": 0.25,
+            "discount": 10,
+            "subcategory": "Spices",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/black_peppercorns.jpg"
+        },
+        {
+            "name": "Vanilla Extract",
+            "description": "Natural vanilla extract for baking and cooking.",
+            "price": 8.49,
+            "weight": 0.1,
+            "discount": 5,
+            "subcategory": "Condiments",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/vanilla_extract.png"
+        },
+        {
+            "name": "Chili Powder",
+            "description": "Authentic chili powder for spicy dishes.",
+            "price": 3.99,
+            "weight": 0.5,
+            "discount": 0,
+            "subcategory": "Spices",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/chili_powder.jpg"
+        },
+        {
+            "name": "Chocolate Bars",
+            "description": "Delicious milk chocolate bars with crispy wafer inside.",
+            "price": 2.5,
+            "weight": 0.2,
+            "discount": 10,
+            "subcategory": "Snacks and Confectionery",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/chocolate_bars.jpg"
+        },
+        {
+            "name": "Corn Chips",
+            "description": "Crunchy corn chips with a touch of salt and lime flavor.",
+            "price": 1.75,
+            "weight": 0.4,
+            "discount": 20,
+            "subcategory": "Snacks and Confectionery",
+            "category": "Pantry and Dry Goods",
+            "image_path": "product_images/corn_chips.png"
+        }
+    ]
+}

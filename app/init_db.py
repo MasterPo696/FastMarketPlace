@@ -3,17 +3,10 @@ from app.models.product_models import Category, Subcategory, Item
 from app.models.user_models import User, Receipt
 from app.models.order_models import Order
 import os
+import json
 
 def init_databases():
     """Initialize databases if they don't exist"""
-    # Delete existing databases
-    if os.path.exists('products.db'):
-        os.remove('products.db')
-    if os.path.exists('users.db'):
-        os.remove('users.db')
-    if os.path.exists('orders.db'):
-        os.remove('orders.db')
-        
     with app.app_context():
         # Создаем все таблицы во всех базах данных
         db.create_all()
@@ -24,19 +17,39 @@ def init_databases():
             tables = [table for table in db.metadata.tables.values()
                      if getattr(table, 'info', {}).get('bind_key') == bind_key]
             db.metadata.create_all(bind=engine, tables=tables)
-            
-        # Убедимся, что все колонки созданы
-        with db.engine.connect() as conn:
-            inspector = db.inspect(db.engine)
-            if 'item' in inspector.get_table_names():
-                columns = [col['name'] for col in inspector.get_columns('item')]
-                if 'is_active' not in columns:
-                    conn.execute(db.text('ALTER TABLE item ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT 1'))
-                if 'isAvailable' not in columns:
-                    conn.execute(db.text('ALTER TABLE item ADD COLUMN isAvailable BOOLEAN DEFAULT 1'))
-                conn.commit()
         
-    print("Databases created successfully")
+        # Инициализируем категории из JSON
+        init_categories_from_json()
+
+def init_categories_from_json():
+    """Initialize categories from JSON file"""
+    try:
+        if Category.query.first() is None:
+            json_path = os.path.join(app.static_folder, 'categories.json')
+            
+            with open(json_path, 'r', encoding='utf-8') as f:
+                categories_data = json.load(f)
+            
+            for category_data in categories_data['categories']:
+                category = Category(name=category_data['name'])
+                db.session.add(category)
+                db.session.flush()  # Получаем ID категории
+                
+                for subcat_name in category_data['subcategories']:
+                    subcategory = Subcategory(
+                        name=subcat_name,
+                        category_id=category.id
+                    )
+                    db.session.add(subcategory)
+                
+            db.session.commit()
+            print("Categories initialized from JSON successfully")
+    except Exception as e:
+        print(f"Error initializing categories from JSON: {str(e)}")
+        db.session.rollback()
+
+if __name__ == '__main__':
+    init_databases()
 
 def drop_databases():
     with app.app_context():

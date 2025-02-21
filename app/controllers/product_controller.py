@@ -11,18 +11,27 @@ class ProductController:
     def index():
         """Display homepage"""
         try:
-            # Получаем все товары без фильтра is_active для отладки
-            items = Item.query.order_by(Item.title).all()
-            categories = Category.query.all()
+            category_id = request.args.get('category_id', type=int)
+            subcategory_id = request.args.get('subcategory_id', type=int)
             
-            # Добавим отладочную информацию
-            print("Found items:", [f"{item.title} (active: {item.is_active}, available: {item.isAvailable})" for item in items])
-            app.logger.info(f"Found {len(items)} items and {len(categories)} categories")
+            # Базовый запрос
+            query = Item.query.filter_by(is_active=True)
+            
+            # Применяем фильтры
+            if category_id:
+                query = query.join(Subcategory).join(Category).filter(Category.id == category_id)
+            elif subcategory_id:
+                query = query.filter(Item.subcategory_id == subcategory_id)
+            
+            items = query.order_by(Item.title).all()
+            categories = Category.query.all()
             
             return render_template(
                 'index.html',
                 items=items,
                 categories=categories,
+                current_category_id=category_id,
+                current_subcategory_id=subcategory_id,
                 title="Home",
                 datetime=datetime
             )

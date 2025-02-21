@@ -1,19 +1,24 @@
-from app.init_app import init_app
-from app.routes import register_routes
+from app import create_app, db
 from app.controllers.init_controller import InitController
 
-# Initialize the application
-app = init_app()
+# Создаем приложение
+app = create_app()
 
-# Register all routes
-register_routes()
+def init_app():
+    """Initialize the application"""
+    with app.app_context():
+        # Создаем все таблицы
+        db.create_all()
+        
+        # Инициализируем админа
+        InitController.init_admin()
+        
+        # Проверяем и заполняем базу данных начальными товарами
+        InitController.check_and_fill_database()
 
 if __name__ == '__main__':
-    # Create application context
-    with app.app_context():
-        # Initialize admin user and test data
-        InitController.init_admin()
-        InitController.add_test_product()
+    # Инициализация приложения
+    init_app()
     
-    # Run the application
+    # Запуск сервера
     app.run(debug=True)

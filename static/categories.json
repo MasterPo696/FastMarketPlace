@@ -1,51 +1,41 @@
 {
   "categories": [
     {
-      "name": "Фрукты",
+      "name": "Fruits and Vegetables",
       "subcategories": [
-        "Свежие фрукты",
-        "Сухофрукты",
-        "Экзотические фрукты"
+        "Fresh Fruits",
+        "Dried Fruits and Nuts",
+        "Exotic Fruits",
+        "Fresh Vegetables",
+        "Leafy Greens",
+        "Mushrooms"
       ]
     },
     {
-      "name": "Овощи",
-      "subcategories": [
-        "Свежие овощи",
-        "Зелень",
-        "Грибы"
-      ]
-    },
-    {
-      "name": "Напитки",
-      "subcategories": [
-        "Соки",
-        "Газированные напитки",
-        "Вода"
-      ]
-    },
-    {
-      "name": "Meat and Poultry",
+      "name": "Meat, Fish, and Poultry",
       "subcategories": [
         "Fresh Meat",
         "Poultry",
-        "Semi-finished Products"
+        "Fish and Seafood",
+        "Processed and Semi-finished Products"
       ]
     },
     {
-      "name": "Dairy Products",
+      "name": "Dairy and Eggs",
       "subcategories": [
         "Milk and Cream",
-        "Cheese",
-        "Yogurt and Desserts"
+        "Cheese and Butter",
+        "Yogurt and Desserts",
+        "Eggs"
       ]
     },
     {
-      "name": "Bread and Pastries",
+      "name": "Bread, Cereals, and Pastries",
       "subcategories": [
-        "Fresh Bread",
-        "Sweet Buns",
-        "Cakes and Pastries"
+        "Fresh Bread and Bakery",
+        "Cakes and Pastries",
+        "Cereals and Grains",
+        "Flour and Baking Ingredients"
       ]
     },
     {
@@ -53,32 +43,20 @@
       "subcategories": [
         "Juices and Nectars",
         "Carbonated Drinks",
-        "Tea and Coffee"
+        "Tea and Coffee",
+        "Water and Mineral Drinks",
+        "Alcoholic Beverages"
       ]
     },
     {
-      "name": "Electronics",
+      "name": "Pantry and Dry Goods",
       "subcategories": [
-        "Phones",
-        "Laptops",
-        "Tablets"
-      ]
-    },
-    {
-      "name": "Clothing",
-      "subcategories": [
-        "Men",
-        "Women",
-        "Kids"
-      ]
-    },
-    {
-      "name": "Books",
-      "subcategories": [
-        "Fiction",
-        "Non-fiction",
-        "Educational"
+        "Pasta and Rice",
+        "Canned and Preserved Foods",
+        "Oils and Sauces",
+        "Spices and Condiments",
+        "Snacks and Confectionery"
       ]
     }
   ]
-} 
+}

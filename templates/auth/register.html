@@ -12,24 +12,16 @@
                 <div class="card-body p-4">
                     <h2 class="text-center mb-4">Register</h2>
                     
-                    <form method="post">
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" required>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Email or Phone</label>
-                            <input type="text" name="identifier" class="form-control" required>
-                            <div class="form-text">Enter either email or phone number</div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                        <button type="submit" class="btn btn-primary">Register</button>
                     </form>
                     
                     <div class="text-center mt-3">
