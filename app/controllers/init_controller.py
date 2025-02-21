@@ -35,21 +35,23 @@ class InitController:
             # Check if test product exists
             test_product = Item.query.filter_by(title='Banana').first()
             if not test_product:
-                # Create categories if they don't exist
-                categories = Category.query.all()
-                if not categories:
-                    fruit_category = Category(name='Fruits')
-                    db.session.add(fruit_category)
-                    db.session.commit()
-                    
-                    fruit_subcategory = Subcategory(
-                        name='Fresh Fruits',
-                        category_id=fruit_category.id
-                    )
-                    db.session.add(fruit_subcategory)
-                    db.session.commit()
-                else:
-                    fruit_subcategory = Subcategory.query.first()
+                # Проверяем существование категорий
+                fruit_category = Category.query.filter_by(name='Фрукты').first()
+                if not fruit_category:
+                    # Если категорий нет, создаем их
+                    from app.init_db import init_categories
+                    init_categories()
+                    fruit_category = Category.query.filter_by(name='Фрукты').first()
+                
+                # Получаем подкатегорию "Тропические"
+                tropical_subcategory = Subcategory.query.filter_by(
+                    name='Тропические', 
+                    category_id=fruit_category.id
+                ).first()
+
+                if not tropical_subcategory:
+                    print("Error: Required subcategory not found")
+                    return
 
                 # Create test product
                 test_product = Item(
@@ -59,14 +61,15 @@ class InitController:
                     weight=150,
                     amount=100,
                     image_path='images/banana.jpg',
-                    subcategory_id=fruit_subcategory.id,
-                    is_active=True
+                    subcategory_id=tropical_subcategory.id,
+                    is_active=True,
+                    isAvailable=True
                 )
                 db.session.add(test_product)
                 db.session.commit()
-                print("Test product created successfully")
+                print(f"Test product created successfully: {test_product.title} (ID: {test_product.id})")
             else:
-                print("Test product already exists")
+                print(f"Test product already exists: {test_product.title} (ID: {test_product.id})")
         except Exception as e:
             db.session.rollback()
             app.logger.error(f"Error adding test product: {str(e)}")

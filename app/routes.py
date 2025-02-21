@@ -115,26 +115,24 @@ def register_routes():
         return dict(datetime=datetime)
 
     # Admin routes
-    @app.route('/admin/products')
-    @login_required
-    @admin_required
-    def admin_products():
-        return ProductController.admin_products()
-
-    @app.route('/admin/products/create', methods=['GET', 'POST'])
-    @login_required
-    @admin_required
-    def admin_create_product():
-        return ProductController.create()
-
-    @app.route('/admin/products/edit/<int:id>', methods=['GET', 'POST'])
-    @login_required
-    @admin_required
-    def admin_edit_product(id):
-        return ProductController.edit(id)
-
-    @app.route('/admin/products/delete/<int:id>', methods=['POST'])
-    @login_required
-    @admin_required
-    def admin_delete_product(id):
-        return ProductController.delete(id) 
+    app.add_url_rule('/admin/products', 'admin_products', 
+                     view_func=ProductController.admin_products, 
+                     methods=['GET'])
+    app.add_url_rule('/admin/manage_products', 'manage_products', 
+                     view_func=ProductController.admin_products, 
+                     methods=['GET'])
+    app.add_url_rule('/admin/products/create', 'create_product', 
+                     view_func=ProductController.create_product, 
+                     methods=['GET', 'POST'])
+    app.add_url_rule('/admin/products/<int:product_id>/edit', 'edit_product',
+                     view_func=ProductController.edit_product, 
+                     methods=['GET', 'POST'])
+    app.add_url_rule('/admin/products/<int:product_id>/delete', 'delete_product',
+                     view_func=ProductController.delete_product, 
+                     methods=['POST'])
+    app.add_url_rule('/admin/products/<int:product_id>/stock', 
+                     view_func=ProductController.update_stock, 
+                     methods=['POST'])
+    app.add_url_rule('/admin/products/<int:product_id>/toggle-active', 
+                     view_func=ProductController.toggle_active, 
+                     methods=['POST']) 
