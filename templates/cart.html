@@ -6,77 +6,88 @@
 
 {% block header %}
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal text-body-emphasis">Корзина</h1>
+  <h1 class="display-4 fw-normal text-body-emphasis">Корзина</h1>
+  <p class="fs-5 text-body-secondary">Ваши выбранные товары</p>
 </div>
 {% endblock %}
 
 {% block body %}
 <div class="container">
-    <div class="row">
-        <div class="col-12">
-            {% if cart_items %}
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Товар</th>
-                            <th>Цена</th>
-                            <th>Количество</th>
-                            <th>Сумма</th>
-                            <th>Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in cart_items %}
-                        <tr>
-                            <td>
-                                {% if item.image_path %}
-                                <img src="{{ url_for('static', filename=item.image_path) }}" 
-                                     alt="{{ item.title }}" 
-                                     style="height: 50px; width: 50px; object-fit: cover;"
-                                     class="me-2">
-                                {% endif %}
-                                {{ item.title }}
-                            </td>
-                            <td>${{ item.price }}</td>
-                            <td>
-                                <div class="btn-group">
-                                    <button onclick="updateCart({{ item.id }}, 'remove')" 
-                                            class="btn btn-sm btn-outline-secondary">-</button>
-                                    <span class="px-2" id="item-count-{{ item.id }}">
-                                        {{ session['cart'].count(item.id) }}
-                                    </span>
-                                    <button onclick="updateCart({{ item.id }}, 'add')" 
-                                            class="btn btn-sm btn-outline-secondary">+</button>
-                                </div>
-                            </td>
-                            <td>${{ (item.price * session['cart'].count(item.id)) | round(2) }}</td>
-                            <td>
-                                <button onclick="updateCart({{ item.id }}, 'delete')" 
-                                        class="btn btn-sm btn-danger">Удалить</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Итого:</strong></td>
-                            <td><strong>${{ total_price | round(2) }}</strong></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div class="text-end mt-3">
-                <a href="/checkout" class="btn btn-primary">Оформить заказ</a>
-            </div>
-            {% else %}
-            <div class="text-center">
-                <h3>Корзина пуста</h3>
-                <a href="/" class="btn btn-primary mt-3">Перейти к покупкам</a>
+  {% if cart_items %}
+  <div class="row">
+    <div class="col-md-8">
+      {% for item, quantity in cart_items.items() %}
+      <div class="card mb-3 border-0 rounded-4 bg-light">
+        <div class="row g-0">
+          <div class="col-4">
+            {% if item.image_path %}
+            <div class="position-relative">
+              {% if item.discount %}
+              <div class="position-absolute top-0 end-0 p-2">
+                <span class="badge bg-danger">-{{ item.discount }}%</span>
+              </div>
+              {% endif %}
+              <img src="{{ url_for('static', filename=item.image_path) }}"
+                   class="img-fluid rounded-4" 
+                   alt="{{ item.title }}"
+                   style="height: 150px; width: 100%; object-fit: cover;">
             </div>
             {% endif %}
+          </div>
+          <div class="col-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text text-muted">{{ item.weight }} • {{ item.description }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  {% if item.discount %}
+                    <small class="text-muted text-decoration-line-through">${{ "%.2f"|format(item.price * quantity) }}</small>
+                    <span class="fs-5 fw-bold text-danger">${{ "%.2f"|format(item.discounted_price * quantity) }}</span>
+                  {% else %}
+                    <span class="fs-5 fw-bold">${{ "%.2f"|format(item.price * quantity) }}</span>
+                  {% endif %}
+                  <small class="text-muted d-block">
+                    {% if item.discount %}
+                      ${{ "%.2f"|format(item.discounted_price) }} за шт.
+                    {% else %}
+                      ${{ "%.2f"|format(item.price) }} за шт.
+                    {% endif %}
+                  </small>
+                </div>
+                <div class="btn-group">
+                  <a href="/remove_from_cart/{{ item.id }}" class="btn btn-outline-secondary rounded-start-pill">
+                    <i class="bi bi-dash"></i>
+                  </a>
+                  <span class="btn btn-outline-secondary disabled">{{ quantity }}</span>
+                  <a href="/add_to_cart/{{ item.id }}" class="btn btn-outline-secondary rounded-end-pill">
+                    <i class="bi bi-plus"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      {% endfor %}
     </div>
+    <div class="col-md-4">
+      <div class="card border-0 rounded-4 bg-light">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Итого</h5>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Товары ({{ session['cart'].values()|sum }})</span>
+            <span>${{ "%.2f"|format(total) }}</span>
+          </div>
+          {{ payment_form|safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center">
+    <h3>Корзина пуста</h3>
+    <a href="/" class="btn btn-primary mt-3">Вернуться к покупкам</a>
+  </div>
+  {% endif %}
 </div>
-{% endblock %} 
+{% endblock %}

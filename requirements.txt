@@ -6,3 +6,4 @@ datetime
 hashlib
 Pillow
 python-magic
+Flask-Migrate

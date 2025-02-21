@@ -5,34 +5,191 @@
 {% endblock %}
 
 {% block header %}
-<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-  <h1 class="display-4 fw-normal text-body-emphasis">Pricing</h1>
-  <p class="fs-5 text-body-secondary">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It's built with default Bootstrap components and utilities with little customization.</p>
+<div class="pricing-header p-3 pb-md-4 mx-auto">
+  <h1 class="display-4 fw-normal text-body-emphasis">Наши товары</h1>
 </div>
 {% endblock %}
 
 {% block body %}
 <div class="container">
   <div class="row">
-    {% for el in data %}
-    <div class="col-md-3 mb-4">
-      <div class="card rounded">
-        {% if el.image_path %}
-        <img src="{{ url_for('static', filename=el.image_path) }}" class="card-img-top" alt="{{ el.title }}" style="height: 150px; object-fit: cover;">
-        {% endif %}
-        <div class="card-header py-3">
-          <h4 class="my-0 fw-normal">{{ el.title }}</h4>
+    <!-- Боковое меню категорий -->
+    <div class="col-md-3">
+      <div class="list-group">
+        <a href="/" class="list-group-item list-group-item-action border-0 rounded mb-2 {% if not current_category_id %}active{% endif %}">
+          Все товары
+        </a>
+        {% for category in categories %}
+        <div class="mb-2">
+          <button class="list-group-item list-group-item-action border-0 rounded w-100 text-start d-flex justify-content-between align-items-center" 
+                  type="button" 
+                  data-bs-toggle="collapse" 
+                  data-bs-target="#category-{{ category.id }}" 
+                  aria-expanded="{% if current_category_id == category.id %}true{% else %}false{% endif %}">
+            {{ category.name }}
+            <i class="bi bi-chevron-down"></i>
+          </button>
+          <div class="collapse {% if current_category_id == category.id %}show{% endif %}" 
+               id="category-{{ category.id }}">
+            <div class="list-group mt-1 ms-3">
+              {% for subcategory in category.subcategories %}
+              <a href="/?subcategory_id={{ subcategory.id }}" 
+                 class="list-group-item list-group-item-action border-0 rounded py-2 {% if current_subcategory_id == subcategory.id %}active{% else %}{% if not subcategory.items %}text-muted{% endif %}{% endif %}">
+                {{ subcategory.name }}
+              </a>
+              {% endfor %}
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <h1 class="card-title pricing-card-title">$ {{el.price}}<small class="text-body-secondary fw-light"></small></h1>
-          <ul class="list-unstyled mt-3 mb-4">
-            <li>{{ el.description }}</li>
-          </ul>
-          <a href="/buy/{{ el.id }}" class="w-100 btn btn-lg btn-outline-primary">Купить</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="col-md-9">
+      <div class="row g-4">
+        {% if data %}
+          {% for el in data %}
+          <div class="col-6 col-md-4">
+            <div class="card h-100 rounded-4 border-0 bg-light">
+              {% if el.image_path %}
+              <div class="position-relative">
+                {% if el.discount %}
+                <div class="position-absolute top-0 end-0 p-2">
+                  <span class="badge bg-danger">-{{ el.discount }}%</span>
+                </div>
+                {% endif %}
+                <img src="{{ url_for('static', filename=el.image_path) }}" 
+                     class="card-img-top rounded-4 cursor-pointer" 
+                     alt="{{ el.title }}" 
+                     style="height: 200px; object-fit: cover;"
+                     data-bs-toggle="modal" 
+                     data-bs-target="#modal-{{ el.id }}">
+              </div>
+              {% endif %}
+              <div class="card-body d-flex flex-column">
+                <div class="mb-2">
+                  {% if el.subcategory %}
+                  <small class="text-muted">{{ el.subcategory.category.name }} - {{ el.subcategory.name }}</small>
+                  {% endif %}
+                  <h5 class="card-title mb-1">{{ el.title }}</h5>
+                  <p class="card-text text-muted mb-1">{{ el.weight }} • {{ el.description }}</p>
+                </div>
+                <div class="mt-auto">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      {% if el.discount %}
+                        <small class="text-muted text-decoration-line-through">${{ "%.2f"|format(el.price) }}</small>
+                        <span class="fs-5 fw-bold text-danger">${{ "%.2f"|format(el.discounted_price) }}</span>
+                      {% else %}
+                        <span class="fs-5 fw-bold">${{ "%.2f"|format(el.price) }}</span>
+                      {% endif %}
+                    </div>
+                    <div class="btn-group">
+                      <a href="/remove_from_cart/{{ el.id }}" 
+                         class="btn btn-outline-secondary rounded-start-pill" 
+                         {% if not session.get('cart', {}).get(el.id|string, 0) %}style="display: none"{% endif %}>
+                         <i class="bi bi-dash"></i>
+                      </a>
+                      <span class="btn btn-outline-secondary disabled">
+                        {{ session.get('cart', {}).get(el.id|string, 0) or 0 }}
+                      </span>
+                      <a href="/add_to_cart/{{ el.id }}" 
+                         class="btn btn-outline-secondary rounded-end-pill">
+                         <i class="bi bi-plus"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-12 text-center py-5">
+            <div class="py-5">
+              <i class="bi bi-emoji-frown display-1 text-muted mb-4"></i>
+              <h3 class="text-muted">Пока тут пусто...</h3>
+              <p class="text-muted">В данной категории еще нет товаров</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for each product -->
+{% for el in data %}
+<div class="modal fade" id="modal-{{ el.id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 rounded-4 overflow-hidden">
+      <div class="modal-body p-0">
+        <div class="row g-0">
+          <div class="col-md-6">
+            {% if el.image_path %}
+            <img src="{{ url_for('static', filename=el.image_path) }}"
+                 class="w-100 h-100"
+                 style="object-fit: cover;"
+                 alt="{{ el.title }}">
+            {% endif %}
+          </div>
+          <div class="col-md-6 p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                {% if el.subcategory %}
+                <small class="text-muted d-block">{{ el.subcategory.category.name }} - {{ el.subcategory.name }}</small>
+                {% endif %}
+                <h3 class="mb-2">{{ el.title }}</h3>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <p class="text-muted mb-4">{{ el.description }}</p>
+            
+            <div class="mb-4">
+              <h5 class="mb-3">Характеристики:</h5>
+              <div class="d-flex justify-content-between border-bottom py-2">
+                <span class="text-muted">Вес:</span>
+                <span>{{ el.weight }} г</span>
+              </div>
+              {% if el.amount %}
+              <div class="d-flex justify-content-between border-bottom py-2">
+                <span class="text-muted">В наличии:</span>
+                <span>{{ el.amount }} шт</span>
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                {% if el.discount %}
+                  <small class="text-muted text-decoration-line-through">${{ "%.2f"|format(el.price) }}</small>
+                  <span class="fs-5 fw-bold text-danger">${{ "%.2f"|format(el.discounted_price) }}</span>
+                {% else %}
+                  <span class="fs-5 fw-bold">${{ "%.2f"|format(el.price) }}</span>
+                {% endif %}
+              </div>
+              <div class="btn-group">
+                <a href="/remove_from_cart/{{ el.id }}" 
+                   class="btn btn-outline-secondary rounded-start-pill" 
+                   {% if not session.get('cart', {}).get(el.id|string, 0) %}style="display: none"{% endif %}>
+                   <i class="bi bi-dash"></i>
+                </a>
+                <span class="btn btn-outline-secondary disabled">
+                  {{ session.get('cart', {}).get(el.id|string, 0) or 0 }}
+                </span>
+                <a href="/add_to_cart/{{ el.id }}" 
+                   class="btn btn-outline-secondary rounded-end-pill">
+                   <i class="bi bi-plus"></i>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    {% endfor %}
   </div>
 </div>
+{% endfor %}
 {% endblock %}

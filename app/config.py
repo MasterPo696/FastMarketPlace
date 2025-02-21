@@ -18,4 +18,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///shop.db'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static/images')
 
-db = SQLAlchemy(app=app)
+db = SQLAlchemy(app)
+
+# Импортируем модели после создания db
+from app.models import *

@@ -1,39 +1,44 @@
 from flask import render_template, request, redirect, session, jsonify
 from toml import load
 from app.payments import ProcessPayment
-from app.pictures import ImageHandler
 from app.config import app, db
+from app.cart import init_cart, get_cart_items, create_payment_form
+from app.creation import handle_item_creation, get_categories, get_subcategories
+from datetime import datetime
+from app.models import Item, Category, Subcategory
+import json
 
-# Добавим секретный ключ для работы с сессиями
-app.secret_key = 'your-secret-key-here'  # Замените на свой секретный ключ
+# Load config
+config = load('secrets/config.toml')
+PUBLIC = config['public']
+SECRET = config['secret']
 
-class Item(db.Model):
-
-    # Основные данные
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-
-    # Цена и скидка
-    price = db.Column(db.Float, nullable=False)
-    discount = db.Column(db.Integer, nullable=False)
-    weight = db.Column(db.Float(100), nullable=False)
-
-    # Количество и доступность
-    amount = db.Column(db.Integer, nullable=False)
-    isAvailable = db.Column(db.Boolean, default=True)
-    
-    image_path = db.Column(db.String(200))
-
-    def __repr__(self):
-        return f'{self.title}'
-
+# Routes
 @app.route('/')
 def index():
-    if 'cart' not in session:
-        session['cart'] = []
-    items = Item.query.order_by(Item.price).all()
-    return render_template("index.html", data=items)
+    init_cart()
+    category_id = request.args.get('category_id', type=int)
+    subcategory_id = request.args.get('subcategory_id', type=int)
+    
+    # Получаем все категории для навигации
+    categories = Category.query.all()
+    
+    # Фильтруем товары
+    query = Item.query
+    if subcategory_id:
+        query = query.filter_by(subcategory_id=subcategory_id)
+    elif category_id:
+        query = query.join(Subcategory).filter(Subcategory.category_id == category_id)
+    
+    items = query.order_by(Item.price).all()
+    
+    return render_template(
+        "index.html",
+        data=items,
+        categories=categories,
+        current_category_id=category_id,
+        current_subcategory_id=subcategory_id
+    )
 
 @app.route('/about')
 def about():
@@ -52,80 +57,117 @@ def buy(id):
 @app.route('/create', methods=['POST', 'GET'])
 def create():
     if request.method == 'POST':
-        title = request.form['title']
-        price = request.form['price']
-        description = request.form['description']
-        
         if 'image' not in request.files:
             return "No image file provided", 400
-        
-        image_handler = ImageHandler()
-        image_path, error, code = image_handler.handle_image_upload(request.files['image'])
+            
+        error, code = handle_item_creation(request.form, request.files['image'])
         if error:
             return error, code
+        return redirect('/')
+    
+    categories = get_categories()
+    return render_template("create.html", categories=categories)
 
-        item = Item(
-            title=title,
-            price=price,
-            description=description,
-            image_path=image_path
-        )
+@app.route('/get_subcategories/<int:category_id>')
+def get_subcategories_route(category_id):
+    subcategories = get_subcategories(category_id)
+    return jsonify([{'id': s.id, 'name': s.name} for s in subcategories])
 
-        try:
-            db.session.add(item)
-            db.session.commit()
-            return redirect('/')
-        except Exception as e:
-            return f"Error adding item to database: {str(e)}", 500
+@app.route('/add_to_cart/<int:id>')
+def add_to_cart(id):
+    init_cart()
+    
+    item_id = str(id)
+    if item_id in session['cart']:
+        session['cart'][item_id] += 1
     else:
-        return render_template("create.html")
+        session['cart'][item_id] = 1
+    
+    session.modified = True
+    return redirect(request.referrer or '/')
 
-@app.route('/update_cart/<int:id>/<action>', methods=['POST'])
-def update_cart(id, action):
-    if 'cart' not in session:
-        session['cart'] = []
-    
-    cart = session['cart']
-    
-    if action == 'add':
-        cart.append(id)
-    elif action == 'remove' and id in cart:
-        cart.remove(id)
-    elif action == 'delete':
-        cart = [item for item in cart if item != id]
-    
-    session['cart'] = cart
-    
-    return jsonify({
-        'count': cart.count(id),
-        'total_items': len(cart)
-    })
+@app.route('/remove_from_cart/<int:id>')
+def remove_from_cart(id):
+    item_id = str(id)
+    if 'cart' in session and item_id in session['cart']:
+        session['cart'][item_id] -= 1
+        if session['cart'][item_id] <= 0:
+            del session['cart'][item_id]
+        session.modified = True
+    return redirect(request.referrer or '/')
 
 @app.route('/cart')
 def cart():
-    if 'cart' not in session:
-        session['cart'] = []
-    
-    cart_items = []
-    total_price = 0
-    
-    # Получаем уникальные ID товаров из корзины
-    unique_ids = set(session['cart'])
-    
-    # Получаем информацию о каждом товаре
-    for id in unique_ids:
-        item = Item.query.get(id)
-        if item:
-            cart_items.append(item)
-            total_price += item.price * session['cart'].count(id)
-    
+    init_cart()
+    cart_items, total = get_cart_items()
+    payment_form = create_payment_form(total, SECRET, PUBLIC) if cart_items else None
+
     return render_template(
-        'cart.html',
+        "cart.html",
         cart_items=cart_items,
-        total_price=total_price
+        total=total,
+        payment_form=payment_form
     )
+
+@app.route('/checkout', methods=['GET'])
+def checkout():
+    init_cart()
+    cart_items, total = get_cart_items()
+    
+    if not cart_items:
+        return redirect('/')
+        
+    try:
+        payment_processor = ProcessPayment({
+            'title': 'Cart Checkout',
+            'price': total
+        })
+        
+        payment_form = payment_processor.create_payment_form({
+            'amount': f"{total:.2f}",
+            'currency': 'USD',
+            'paymentSystem': 'Pay',
+            'orderId': f"CART_{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            'redirect': "true"
+        }, PUBLIC)
+        
+        return render_template(
+            "cart.html",
+            cart_items=cart_items,
+            total=total,
+            payment_form=payment_form
+        )
+    except Exception as e:
+        app.logger.error(f"Checkout error: {str(e)}")
+        return "Error processing checkout", 500
+
+def init_categories():
+    if Category.query.first() is None:
+        with open('app/categories.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            
+        for cat_data in data['categories']:
+            category = Category(name=cat_data['name'])
+            db.session.add(category)
+            db.session.flush()  # Получаем ID категории
+            
+            for subcat_name in cat_data['subcategories']:
+                subcategory = Subcategory(
+                    name=subcat_name,
+                    category_id=category.id
+                )
+                db.session.add(subcategory)
+        
+        db.session.commit()
+
+def get_categories():
+    return Category.query.all()
+
+def get_subcategories(category_id):
+    return Subcategory.query.filter_by(category_id=category_id).all()
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        init_categories()
     app.run(debug=True)
