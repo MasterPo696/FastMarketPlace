@@ -1,6 +1,6 @@
 # 🛍️ Flask E-commerce Marketplace
 
-A modern e-commerce marketplace built with Flask, SQLAlchemy, and Bootstrap. Features secure payment processing and image handling capabilities.
+A modern e-commerce marketplace built with Flask, SQLAlchemy, and Bootstrap. This platform offers secure payment processing, image handling capabilities, and a robust product management system.
 
 ## ✨ Features
 
@@ -24,9 +24,9 @@ A modern e-commerce marketplace built with Flask, SQLAlchemy, and Bootstrap. Fea
 
 ## 📋 Prerequisites
 
-The following dependencies are required (referenced from):
+Ensure you have the following dependencies installed:
 
-```1:9:requirements.txt
+```plaintext
 flask
 flask-sqlalchemy
 toml
@@ -38,38 +38,42 @@ Pillow
 python-magic
 ```
 
-
 ## 🚀 Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/MasterPo696/FastMarketPlace.git
-cd flask-marketplace
-```
+1. **Clone the repository:**
 
-2. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+   ```bash
+   git clone https://github.com/MasterPo696/FastMarketPlace.git
+   cd flask-marketplace
+   ```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+2. **Create a virtual environment:**
 
-4. Create `secrets/config.toml` with your payment credentials:
-```toml
-public = 'your_public_key'
-secret = 'your_secret_key'
-```
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-5. Initialize the database:
-```bash
-flask db init
-flask db migrate
-flask db upgrade
-```
+3. **Install dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Create `secrets/config.toml` with your payment credentials:**
+
+   ```toml
+   public = 'your_public_key'
+   secret = 'your_secret_key'
+   ```
+
+5. **Initialize the database:**
+
+   ```bash
+   flask db init
+   flask db migrate
+   flask db upgrade
+   ```
 
 ## 🏃‍♂️ Running the Application
 
@@ -94,20 +98,21 @@ flask-marketplace/
 │   ├── about.html       # About page
 │   ├── create.html      # Create page
 │   ├── payment.html     # Payment page
-│   └── index.html        # Base template
+│   └── base.html        # Base template
 ├── secrets/
-│   ├── example.toml      # Configuration files
+│   ├── example.toml     # Configuration files
 │   └── config.toml      # Configuration files
 ├── venv/
 ├── .gitignore
 ├── Readme.md
-├── main.py             # Application entry point
-└── requirements.txt    # Project dependencies
+├── main.py              # Application entry point
+└── requirements.txt     # Project dependencies
 ```
 
 ## 💡 Key Features Explained
 
 ### Payment Processing
+
 The application implements secure payment processing using a third-party payment gateway. The payment system:
 - Generates unique order IDs
 - Creates secure payment signatures
@@ -115,6 +120,7 @@ The application implements secure payment processing using a third-party payment
 - Processes transactions securely
 
 ### Image Handling
+
 Secure image upload system with:
 - File type validation
 - Secure filename generation
@@ -122,21 +128,8 @@ Secure image upload system with:
 - Automated directory management
 
 ### Database Schema
-The product database structure (referenced from):
 
-```16:25:main.py
-class Item(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    isAvailable = db.Column(db.Boolean, default=True)
-    description = db.Column(db.Text, nullable=False)
-    image_path = db.Column(db.String(200))  # Add this line
-
-    def __repr__(self):
-        return f'{self.title}'
-```
-
+The product database structure is defined in the `main.py` file.
 
 ## 🔐 Security Features
 
@@ -160,3 +153,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Bootstrap for the UI components
 - Flask community for the excellent documentation
 - All contributors who help improve this project
+
+## 📈 Future Enhancements
+
+- Implement a recommendation system for products
+- Add support for multiple languages
+- Integrate with more payment gateways
+- Enhance the admin dashboard with analytics
