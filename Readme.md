@@ -88,11 +88,22 @@ Visit `http://localhost:5000` in your browser.
 ```
 flask-marketplace/
 ├── app/
+│   ├── controllers/
+│   ├── models/
+│   ├── services/
 │   ├── payments.py      # Payment processing
 │   ├── config.py        # Configuration
-│   └── pictures.py      # Image handling
+│   ├── pictures.py      # Image handling
+│   ├── routes.py        # Routes
+│   └── utils.py         # Utility functions
+├── src/
+│   ├── core/            # Core functionality   
+│   ├── infrastructure/  # Infrastructure
+│   └── web/             # Web functionality
 ├── static/
-│   └── images/          # Uploaded product images
+│   ├── js/              # JavaScript files
+│   ├── images/          # Uploaded product images
+│   └── json             # JSON files
 ├── templates/           # HTML templates
 │   ├── index.html       # Main page
 │   ├── about.html       # About page
@@ -102,9 +113,13 @@ flask-marketplace/
 ├── secrets/
 │   ├── example.toml     # Configuration files
 │   └── config.toml      # Configuration files
+├── instance/
+│   ├── config.toml      # Configuration files
+│   └── data.db          # Database
 ├── venv/
 ├── .gitignore
 ├── Readme.md
+├── migrations.py        # Migrations
 ├── main.py              # Application entry point
 └── requirements.txt     # Project dependencies
 ```
