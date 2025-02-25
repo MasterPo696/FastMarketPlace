@@ -11,6 +11,8 @@ A modern e-commerce marketplace built with Flask, SQLAlchemy, and Bootstrap. Thi
 - 📦 Product management system
 - 🔐 Secure file handling
 - 🗄️ SQLite database integration
+  
+![Uploading image.png…]()
 
 ## 🛠️ Technologies Used
 
