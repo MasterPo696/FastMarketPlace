@@ -11,7 +11,16 @@
                 data-bs-toggle="collapse" 
                 data-bs-target="#category-{{ category.id }}" 
                 aria-expanded="{% if current_category_id == category.id %}true{% else %}false{% endif %}">
-          {{ category.name }}
+          {{ category.name if category.name in ['Electronics', 'Books'] else {
+            'Фрукты': 'Fruits',
+            'Овощи': 'Vegetables', 
+            'Напитки': 'Beverages',
+            'Meat and Poultry': 'Meat and Poultry',
+            'Dairy Products': 'Dairy Products',
+            'Bread and Pastries': 'Bread and Pastries',
+            'Beverages': 'Beverages',
+            'Clothing': 'Clothing'
+          }.get(category.name, category.name) }}
           <i class="bi bi-chevron-down"></i>
         </button>
         <div class="collapse {% if current_category_id == category.id %}show{% endif %}" 

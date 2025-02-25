@@ -328,7 +328,7 @@
 <div class="main-content">
     <div class="container py-3">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none ms-4">
                 <span class="fs-4">FastMarket</span>
             </a>
             
@@ -401,12 +401,12 @@
 <div class="side-cart" id="sideCart" 
      {% if request.endpoint != 'index' %}style="display: none"{% endif %}>
     <div class="cart-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Корзина</h5>
+        <h5 class="mb-0">Cart</h5>
     </div>
     
     <div class="delivery-info mb-3">
         <i class="bi bi-clock me-2"></i>
-        <span>Время доставки: 15 минут</span>
+        <span>Delivery time: 15 minutes</span>
     </div>
     
     <div class="cart-items">
@@ -443,7 +443,7 @@
             {% endfor %}
         {% else %}
             <div class="text-center py-5">
-                <p class="text-muted">Корзина пуста</p>
+                <p class="text-muted">Cart is empty</p>
             </div>
         {% endif %}
     </div>
@@ -451,10 +451,10 @@
     {% if session.get('cart', {}) %}
     <div class="cart-footer mt-auto">
         <div class="d-flex justify-content-between mb-3">
-            <span>Итого:</span>
+            <span>Total:</span>
             <span class="fw-bold">${{ "%.2f"|format(get_cart_total()) }}</span>
         </div>
-        <a href="/cart" class="btn btn-primary w-100">Оформить заказ</a>
+        <a href="/cart" class="btn btn-primary w-100">Checkout</a>
     </div>
     {% endif %}
 </div>
