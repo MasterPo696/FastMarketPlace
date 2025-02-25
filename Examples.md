@@ -21,7 +21,3 @@ On the payment page, users can enter their details to complete the purchase. ðŸ’
 ## Conclusion
 
 This application provides users with a convenient and secure way to shop online. We are continuously working on improving functionality and user experience. ðŸš€
-
-#Photo op the app
-
-#Photo of payment
